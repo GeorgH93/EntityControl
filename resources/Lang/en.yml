@@ -1,0 +1,41 @@
+Version: 1
+Language:
+  Build:
+    IronGolem: '§eYou are not allowed to build an §bIron Golem§e!'
+    Wither: '§eYou are not allowed to build a §bWither§e!'
+    SnowGolem: '§eYou are not allowed to build an §bSnow Golem§e!'
+  Egg:
+    ChickenEgg: "§eYou don't have permission to spawn Chickens with eggs."
+    SpawnEgg: "§eYou don't have permission to spawn this §b%s§e."
+    TimedMaxPerDay: '§eYou have spawned the maximum amount of entities for today. Please wait till tomorrow.'
+    TimedCooldown: '§ePlease wait some time before spawning the next entity!'
+  RemovedEntites: "§7Removed %d %s in your chunk."
+  Entity:
+    EID0: 'Entity'
+    EID50: 'Creeper'
+    EID51: 'Skeleton'
+    EID52: 'Spider'
+    EID54: 'Zombie'
+    EID55: 'Slime'
+    EID56: 'Ghast'
+    EID57: 'Zombie Pigman'
+    EID58: 'Enderman'
+    EID59: 'Cave Spider'
+    EID60: 'Silverfish'
+    EID61: 'Blaze'
+    EID62: 'Magma Cube'
+    EID65: 'Bat'
+    EID66: 'Witch'
+    EID67: 'Endermite'
+    EID68: 'Guardian'
+    EID90: 'Pig'
+    EID91: 'Sheep'
+    EID92: 'Cow'
+    EID93: 'Chicken'
+    EID94: 'Squid'
+    EID95: 'Wolf'
+    EID96: 'Mooshroomcow'
+    EID98: 'Ocelot'
+    EID100: 'Horse'
+    EID101: 'Rabbit'
+    EID120: 'Villager'

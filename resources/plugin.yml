@@ -1,0 +1,161 @@
+name: EntityControl
+main: at.pcgamingfreaks.EntityControl.EntityControl
+version: ${version}
+author: GeorgH93
+permissions:
+  entitycontrol.*:
+    description: Allows to spawn all entitys
+    children:
+      entitycontrol.build.*: true
+      entitycontrol.egg.*: true
+      entitycontrol.egg.timed.nolimit: true
+      entitycontrol.egg.timed.nocd: true
+      entitycontrol.chickenegg: true
+  entitycontrol.build.*:
+    description: Allows to build all buildable mobs
+    children:
+      entitycontrol.build.irongolem: true
+      entitycontrol.build.wither: true
+      entitycontrol.build.snowgolem: true
+  entitycontrol.egg.*:
+    description: Allows to use all mob eggs
+    children:
+      entitycontrol.chickenegg: true
+      entitycontrol.egg.monster.*: true
+      entitycontrol.egg.animal.*: true
+      entitycontrol.egg.npc.*: true
+  entitycontrol.egg.monster.*:
+    description: Allows to use all monster spawn eggs
+    children:
+      entitycontrol.egg.monster.creeper: true
+      entitycontrol.egg.monster.skeleton: true
+      entitycontrol.egg.monster.spider: true
+      entitycontrol.egg.monster.zombie: true
+      entitycontrol.egg.monster.slime: true
+      entitycontrol.egg.monster.ghast: true
+      entitycontrol.egg.monster.pigman: true
+      entitycontrol.egg.monster.enderman: true
+      entitycontrol.egg.monster.cavespider: true
+      entitycontrol.egg.monster.silverfish: true
+      entitycontrol.egg.monster.blaze: true
+      entitycontrol.egg.monster.magmacube: true
+      entitycontrol.egg.monster.endermite: true
+      entitycontrol.egg.monster.guardian: true
+  entitycontrol.egg.animal.*:
+    description: Allows to use all animal spawn eggs
+    children:
+      entitycontrol.egg.animal.bat: true
+      entitycontrol.egg.animal.pig: true
+      entitycontrol.egg.animal.sheep: true
+      entitycontrol.egg.animal.cow: true
+      entitycontrol.egg.animal.chicken: true
+      entitycontrol.egg.animal.squid: true
+      entitycontrol.egg.animal.wolf: true
+      entitycontrol.egg.animal.mooshroomcow: true
+      entitycontrol.egg.animal.occelot: true
+      entitycontrol.egg.animal.horse: true
+      entitycontrol.egg.animal.rabbit: true
+  entitycontrol.egg.npc.*:
+    description: Allows to use all npc spawn eggs
+    children:
+      entitycontrol.egg.npc.witch: true
+      entitycontrol.egg.npc.villager: true
+  entitycontrol.egg.monster.creeper:
+    description: Allows to spawn creeper from spawn eggs
+    default: op
+  entitycontrol.egg.monster.skeleton:
+    description: Allows to spawn skeleton from spawn eggs
+    default: op
+  entitycontrol.egg.monster.spider:
+    description: Allows to spawn spider from spawn eggs
+    default: op
+  entitycontrol.egg.monster.zombie:
+    description: Allows to spawn zombie from spawn eggs
+    default: op
+  entitycontrol.egg.monster.slime:
+    description: Allows to spawn slime from spawn eggs
+    default: op
+    entitycontrol.egg.monster.ghast:
+    description: Allows to spawn ghast from spawn eggs
+    default: op
+  entitycontrol.egg.monster.pigman:
+    description: Allows to spawn pigman from spawn eggs
+    default: op
+  entitycontrol.egg.monster.enderman:
+    description: Allows to spawn enderman from spawn eggs
+    default: op
+  entitycontrol.egg.monster.cavespider:
+    description: Allows to spawn cavespider from spawn eggs
+    default: op
+  entitycontrol.egg.monster.silverfish:
+    description: Allows to spawn silverfish from spawn eggs
+    default: op
+  entitycontrol.egg.monster.blaze:
+    description: Allows to spawn blaze from spawn eggs
+    default: op
+  entitycontrol.egg.monster.magmacube:
+    description: Allows to spawn magmacube from spawn eggs
+    default: op
+  entitycontrol.egg.monster.endermite:
+    description: Allows to spawn magmacube from spawn eggs
+    default: op
+  entitycontrol.egg.monster.guardian:
+    description: Allows to spawn magmacube from spawn eggs
+    default: op
+  entitycontrol.egg.animal.bat:
+    description: Allows to spawn bat from spawn eggs
+    default: op
+  entitycontrol.egg.animal.pig:
+    description: Allows to spawn pig from spawn eggs
+    default: op
+  entitycontrol.egg.animal.sheep:
+    description: Allows to spawn sheep from spawn eggs
+    default: op
+  entitycontrol.egg.animal.cow:
+    description: Allows to spawn cow from spawn eggs
+    default: op
+  entitycontrol.egg.animal.chicken:
+    description: Allows to spawn chicken from spawn eggs
+    default: op
+  entitycontrol.egg.animal.squid:
+    description: Allows to spawn squid from spawn eggs
+    default: op
+  entitycontrol.egg.animal.wolf:
+    description: Allows to spawn wolf from spawn eggs
+    default: op
+  entitycontrol.egg.animal.mooshroomcow:
+    description: Allows to spawn mooshroomcow from spawn eggs
+    default: op
+  entitycontrol.egg.animal.occelot:
+    description: Allows to spawn occelot from spawn eggs
+    default: op
+  entitycontrol.egg.animal.horse:
+    description: Allows to spawn horse from spawn eggs
+    default: op
+  entitycontrol.egg.animal.rabbit:
+    description: Allows to spawn horse from spawn eggs
+    default: op
+  entitycontrol.egg.npc.witch:
+    description: Allows to spawn witch from spawn eggs
+    default: op
+  entitycontrol.egg.npc.villager:
+    description: Allows to spawn villager from spawn eggs
+    default: op
+  entitycontrol.egg.timed.nolimit:
+    description: Disables the spawns per day limit
+    default: op
+  entitycontrol.egg.timed.nocd:
+    description: Disables the spawn cooldown
+    default: op
+  entitycontrol.chickenegg:
+    description: Allows to use chicken eggs to spawn chickens
+    default: op
+  entitycontrol.build.snowgolem:
+    description: Allows to build a snowgolem
+    default: op
+  entitycontrol.build.wither:
+    description: Allows to build a wither
+    default: op
+  entitycontrol.build.irongolem:
+    description: Allows to build an irongolem
+    default: op
