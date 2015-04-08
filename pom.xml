@@ -5,8 +5,8 @@
   <version>0.9</version>
   <repositories>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public</url>
+      <id>md5-public</id>
+      <url>http://repo.md-5.net/content/groups/public/</url>
     </repository>
   </repositories>
   <build>
