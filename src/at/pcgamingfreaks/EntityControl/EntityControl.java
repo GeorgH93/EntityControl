@@ -55,6 +55,8 @@ public class EntityControl extends JavaPlugin
 		Message_RemovedEntites = lang.Get("RemovedEntites");
 		
 		RegisterEvents();
+		
+		log.info("Entity Control finished loading and is now watching all the entitys");
 	}
 
 	public void RegisterEvents()
@@ -88,6 +90,7 @@ public class EntityControl extends JavaPlugin
 	public void onDisable()
 	{
 	    getServer().getScheduler().cancelTasks(this);
+	    log.info("All running tasks have been stopped. Plugin disabled.");
 	}
 	
 	
