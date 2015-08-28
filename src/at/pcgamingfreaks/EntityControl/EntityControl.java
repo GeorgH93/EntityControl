@@ -28,7 +28,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Ambient;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
@@ -50,9 +49,9 @@ public class EntityControl extends JavaPlugin
 		lang = new Language(this);
 		
 		
-		NotifyPlayers = config.GetLimiterNotifyPlayers();
-		SurroundingChunks = config.GetLimiterCheckSurroundingChunks();
-		Message_RemovedEntites = lang.Get("RemovedEntites");
+		notifyPlayers = config.GetLimiterNotifyPlayers();
+		surroundingChunks = config.GetLimiterCheckSurroundingChunks();
+		message_RemovedEntites = lang.Get("RemovedEntites");
 		
 		RegisterEvents();
 		
@@ -95,20 +94,20 @@ public class EntityControl extends JavaPlugin
 	
 	
 	
-	private boolean NotifyPlayers;
-	private int SurroundingChunks;
-	private String Message_RemovedEntites;
+	private boolean notifyPlayers;
+	private int surroundingChunks;
+	private String message_RemovedEntites;
 	
 	public void CheckChunks(Location loc)
 	{
 		Chunk c = loc.getChunk();
 		CheckChunk(c);
-		if(SurroundingChunks > 0)
+		if(surroundingChunks > 0)
 		{
 			World w = loc.getWorld();
-		    for(int x = c.getX() + SurroundingChunks; x >= c.getX() - SurroundingChunks; x--)
+		    for(int x = c.getX() + surroundingChunks; x >= c.getX() - surroundingChunks; x--)
 		    {
-		    	for(int z = c.getZ() + SurroundingChunks; z >= c.getZ() - SurroundingChunks; z--)
+		    	for(int z = c.getZ() + surroundingChunks; z >= c.getZ() - surroundingChunks; z--)
 		    	{
 		    		CheckChunk(w.getChunkAt(x, z));
 		        }
@@ -124,15 +123,13 @@ public class EntityControl extends JavaPlugin
 		}
 		Entity[] ents = c.getEntities();
 		HashMap<String, ArrayList<Entity>> types = new HashMap<String, ArrayList<Entity>>();
-		EntityType t;
 	    for(int i = ents.length - 1; i >= 0; i--)
 	    {
 	    	if(ents[i] instanceof Player)
 	    	{
 	    		continue;
 	    	}
-	    	t = ents[i].getType();
-		    String eType = t.toString();
+		    String eType = ents[i].getType().toString();
 		    String eGroup = getMobGroup(ents[i]);
 		    if(config.GetLimiterMaxEntitiesContains(eType))
 		    {
@@ -157,14 +154,14 @@ public class EntityControl extends JavaPlugin
 		    int limit = config.GetLimiterMaxEntities(eType);
 		    if(entry.getValue().size() > limit)
 		    {
-		        if(NotifyPlayers)
+		        if(notifyPlayers)
 		        {
 		        	for(int i = ents.length - 1; i >= 0; i--)
 		        	{
 		        		if(ents[i] instanceof Player)
 		        		{
 		        			Player p = (Player)ents[i];
-		        			p.sendMessage(String.format(Message_RemovedEntites, entry.getValue().size() - limit, eType));
+		        			p.sendMessage(String.format(message_RemovedEntites, entry.getValue().size() - limit, eType));
 		        		}
 		        	}
 		        }
