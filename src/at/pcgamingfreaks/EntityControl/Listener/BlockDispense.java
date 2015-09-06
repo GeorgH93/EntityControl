@@ -50,15 +50,11 @@ public class BlockDispense implements Listener
 	@EventHandler
 	public void onDispense(BlockDispenseEvent event)
 	{
-		if (event.isCancelled())
+		if (IgnoreWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase()))
 		{
 			return;
 		}
-		if(IgnoreWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase()))
-		{
-			return;
-		}
-		if(event.getItem().getType() == Material.EGG)
+		if (event.getItem().getType() == Material.EGG)
 		{
 			if(ChickenEgg)
 			{
@@ -72,11 +68,11 @@ public class BlockDispense implements Listener
 				}
 			}
 		}
-		else if(event.getItem().getType() == Material.MONSTER_EGG)
+		else if (event.getItem().getType() == Material.MONSTER_EGG)
 		{
-			if(SpawnEgg)
+			if (SpawnEgg)
 			{
-				if(dispenseSnowball)
+				if (dispenseSnowball)
 				{
 					event.setItem(new ItemStack(Material.SNOW_BALL));
 				}
@@ -86,14 +82,14 @@ public class BlockDispense implements Listener
 				}
 			}
 		}
-		else if(event.getItem().getType() == Material.EXP_BOTTLE)
+		else if (event.getItem().getType() == Material.EXP_BOTTLE)
 		{
 			if(EXP_Bottle)
 			{
 				event.setCancelled(true);
 			}
 		}
-		else if(event.getItem().getType() == Material.FIRE || event.getItem().getType() == Material.FIREBALL)
+		else if (event.getItem().getType() == Material.FIRE || event.getItem().getType() == Material.FIREBALL)
 		{
 			if(FireCharge)
 			{

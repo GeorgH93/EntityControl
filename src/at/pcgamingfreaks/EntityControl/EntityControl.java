@@ -38,17 +38,14 @@ import at.pcgamingfreaks.EntityControl.Listener.*;
 
 public class EntityControl extends JavaPlugin
 {
-	public Logger log;
-	public Config config;
+	public Logger log = getLogger();
+	public Config config = new Config(this);
 	public static Language lang;
 
 	public void onEnable()
 	{
-		log = getLogger();
-		config = new Config(this);
 		lang = new Language(this);
-		
-		
+
 		notifyPlayers = config.GetLimiterNotifyPlayers();
 		surroundingChunks = config.GetLimiterCheckSurroundingChunks();
 		message_RemovedEntites = lang.Get("RemovedEntites");
@@ -121,23 +118,23 @@ public class EntityControl extends JavaPlugin
 		{
 			return;
 		}
-		Entity[] ents = c.getEntities();
-		HashMap<String, ArrayList<Entity>> types = new HashMap<String, ArrayList<Entity>>();
-	    for(int i = ents.length - 1; i >= 0; i--)
+		Entity[] entities = c.getEntities();
+		HashMap<String, ArrayList<Entity>> types = new HashMap<>();
+	    for(int i = entities.length - 1; i >= 0; i--)
 	    {
-	    	if(ents[i] instanceof Player)
+	    	if(entities[i] instanceof Player)
 	    	{
 	    		continue;
 	    	}
-		    String eType = ents[i].getType().toString();
-		    String eGroup = getMobGroup(ents[i]);
+		    String eType = entities[i].getType().toString();
+		    String eGroup = getMobGroup(entities[i]);
 		    if(config.GetLimiterMaxEntitiesContains(eType))
 		    {
 		    	if (!types.containsKey(eType))
 		    	{
 		    		types.put(eType, new ArrayList<Entity>());
 		        }
-		        types.get(eType).add(ents[i]);
+		        types.get(eType).add(entities[i]);
 		    }
 		    if(config.GetLimiterMaxEntitiesContains(eGroup))
 		    {
@@ -145,22 +142,22 @@ public class EntityControl extends JavaPlugin
 		    	{
 		    		types.put(eGroup, new ArrayList<Entity>());
 		        }
-		        types.get(eGroup).add(ents[i]);
+		        types.get(eGroup).add(entities[i]);
 		    }
 	    }
 		for(Map.Entry<String, ArrayList<Entity>> entry : types.entrySet())
 		{
-			String eType = (String)entry.getKey();
+			String eType = entry.getKey();
 		    int limit = config.GetLimiterMaxEntities(eType);
 		    if(entry.getValue().size() > limit)
 		    {
 		        if(notifyPlayers)
 		        {
-		        	for(int i = ents.length - 1; i >= 0; i--)
+		        	for(int i = entities.length - 1; i >= 0; i--)
 		        	{
-		        		if(ents[i] instanceof Player)
+		        		if(entities[i] instanceof Player)
 		        		{
-		        			Player p = (Player)ents[i];
+		        			Player p = (Player)entities[i];
 		        			p.sendMessage(String.format(message_RemovedEntites, entry.getValue().size() - limit, eType));
 		        		}
 		        	}

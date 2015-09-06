@@ -40,9 +40,9 @@ public class PlayerInteract implements Listener
 	private long interval, cleanInterval;
 	private int maxperday;
 	private Date lastClean;
-	private HashSet<Integer> AllowedIDs = new HashSet<Integer>();
-	private HashMap<UUID, Integer> count = new HashMap<UUID, Integer>();
-	private HashMap<UUID, Date> last = new HashMap<UUID, Date>();
+	private HashSet<Integer> AllowedIDs = new HashSet<>();
+	private HashMap<UUID, Integer> count = new HashMap<>();
+	private HashMap<UUID, Date> last = new HashMap<>();
 	private HashSet<String> IgnoreWorlds;
 	private String Message_SpawnEgg, Message_Cooldown, Message_DayMax;
 	
@@ -112,7 +112,7 @@ public class PlayerInteract implements Listener
 						int c = 0;
 						if(ct != null)
 						{
-							c = ct.intValue();
+							c = ct;
 						}
 						if(c >= maxperday && !p.hasPermission("entitycontrol.egg.timed.nolimit"))
 						{

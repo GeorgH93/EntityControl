@@ -55,7 +55,7 @@ public enum MobType
 	private String name;
     private MobCategory category = MobCategory.UNKNOWN;
 
-    private MobType(int ID, MobCategory Category)
+    MobType(int ID, MobCategory Category)
     {
     	id = ID;
     	category = Category;
@@ -84,7 +84,7 @@ public enum MobType
     
     public enum MobCategory
     {
-        MONSTER,  ANIMAL,  NPC,  UNKNOWN;
+        MONSTER,  ANIMAL,  NPC,  UNKNOWN
     }
     
     public static MobType getMobTypeFromId(int id)

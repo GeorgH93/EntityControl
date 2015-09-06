@@ -33,7 +33,7 @@ public class ChunkLoad implements Listener
 {
 	private EntityControl plugin;
 	
-	private HashMap<Chunk, Integer> chunkTasks = new HashMap<Chunk, Integer>();
+	private HashMap<Chunk, Integer> chunkTasks = new HashMap<>();
 	private long interval;
 	private boolean chunkRecheck, onLoadCheck;
 	private HashSet<String> IgnoreWorlds;
@@ -59,7 +59,7 @@ public class ChunkLoad implements Listener
 			inspectTask task = new inspectTask(event.getChunk());
 			int taskID = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, task, interval, interval);
 			task.setId(taskID);
-			chunkTasks.put(event.getChunk(), Integer.valueOf(taskID));
+			chunkTasks.put(event.getChunk(), taskID);
 	    }
 		if(onLoadCheck)
 		{
@@ -72,7 +72,7 @@ public class ChunkLoad implements Listener
 	{
 		if(chunkTasks.containsKey(e.getChunk()))
 	    {
-			plugin.getServer().getScheduler().cancelTask(chunkTasks.get(e.getChunk()).intValue());
+			plugin.getServer().getScheduler().cancelTask(chunkTasks.get(e.getChunk()));
 			chunkTasks.remove(e.getChunk());
 	    }
 	}
