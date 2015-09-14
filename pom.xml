@@ -1,43 +1,84 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>at.pcgamingfreaks</groupId>
-  <artifactId>EntityControl</artifactId>
-  <version>0.11</version>
-  <repositories>
-    <repository>
-      <id>spigot-nexus</id>
-      <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
-    </repository>
-  </repositories>
-  <build>
-    <defaultGoal>clean install</defaultGoal>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>resources</directory>
-        <filtering>true</filtering>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  <dependencies>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.8.8-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>at.pcgamingfreaks</groupId>
+	<artifactId>EntityControl</artifactId>
+	<version>0.11</version>
+	<packaging>jar</packaging>
+
+	<scm>
+		<connection>scm:git:git@github.com:GeorgH93/Bukkit_EntityControl.git</connection>
+		<developerConnection>scm:git:git@github.com:GeorgH93/Bukkit_EntityControl.git</developerConnection>
+		<url>git@github.com:GeorgH93/Bukkit_EntityControl.git</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/GeorgH93/Bukkit_EntityControl/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://ci.pcgamingfreaks.at/job/Bukkit_EntityControl/</url>
+	</ciManagement>
+
+	<name>Bukkit EntityControl</name>
+	<description>A bukkit plugin for controlling entitys on the server.</description>
+	<inceptionYear>2014</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL) v3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<repositories>
+		<repository>
+			<id>spigot-nexus</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>clean install</defaultGoal>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://repo.pcgamingfreaks.at/repository/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://repo.pcgamingfreaks.at/repository/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
