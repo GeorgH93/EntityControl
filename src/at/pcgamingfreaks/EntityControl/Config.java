@@ -30,7 +30,7 @@ public class Config
 {
 	private FileConfiguration config;
 	private EntityControl EC;
-	private static final int CONFIG_VERSION = 1;
+	private static final int CONFIG_VERSION = 2;
 	
 	public Config(EntityControl ec)
 	{
@@ -84,6 +84,7 @@ public class Config
 		config.set("Dispenser.Block.dispenseSnowball",	true);
 		config.set("Dispenser.Block.Fire",				true);
 		config.set("Dispenser.Block.EXP_Bottle",		true);
+		config.set("Dispenser.Block.Pumpkin",           true);
 		config.set("Dispenser.IgnoreWorlds",			new ArrayList<String>());
 		config.set("Limiter.Enable",					true);
 		config.set("Limiter.EnableOnSpawn",				true);
@@ -135,7 +136,8 @@ public class Config
 	{
 		switch(config.getInt("Version"))
 		{
-			case 0: break;
+			case 1: config.set("Dispenser.Block.Pumpkin", true);
+				break;
 			case CONFIG_VERSION: return false;
 			default: EC.log.info("Config File Version newer than expected!"); return false;
 		}

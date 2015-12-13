@@ -31,8 +31,7 @@ public class BlockDispense implements Listener
 {
 	private EntityControl plugin;
 	
-	private boolean ChickenEgg, SpawnEgg, dispenseSnowball;
-	private boolean EXP_Bottle, FireCharge;
+	private boolean ChickenEgg, SpawnEgg, dispenseSnowball, EXP_Bottle, FireCharge, Pumpkin;
 	private HashSet<String> IgnoreWorlds;
 	
 	public BlockDispense(EntityControl ec)
@@ -44,57 +43,32 @@ public class BlockDispense implements Listener
 		dispenseSnowball = plugin.config.GetDispenserBlock("dispenseSnowball");
 		EXP_Bottle		 = plugin.config.GetDispenserBlock("EXP_Bottle");
 		FireCharge		 = plugin.config.GetDispenserBlock("Fire");
+		Pumpkin          = plugin.config.GetDispenserBlock("Pumpkin");
 		IgnoreWorlds	 = plugin.config.GetDispenserIgnoreWorlds();
 	}
 	
 	@EventHandler
 	public void onDispense(BlockDispenseEvent event)
 	{
-		if (IgnoreWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase()))
+		if(IgnoreWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase()))
 		{
 			return;
 		}
-		if (event.getItem().getType() == Material.EGG)
+		if((ChickenEgg && event.getItem().getType() == Material.EGG) || (SpawnEgg && event.getItem().getType() == Material.MONSTER_EGG))
 		{
-			if(ChickenEgg)
+			if(dispenseSnowball)
 			{
-				if(dispenseSnowball)
-				{
-					event.setItem(new ItemStack(Material.SNOW_BALL));
-				}
-				else
-				{
-					event.setCancelled(true);
-				}
+				event.setItem(new ItemStack(Material.SNOW_BALL));
 			}
-		}
-		else if (event.getItem().getType() == Material.MONSTER_EGG)
-		{
-			if (SpawnEgg)
-			{
-				if (dispenseSnowball)
-				{
-					event.setItem(new ItemStack(Material.SNOW_BALL));
-				}
-				else
-				{
-					event.setCancelled(true);
-				}
-			}
-		}
-		else if (event.getItem().getType() == Material.EXP_BOTTLE)
-		{
-			if(EXP_Bottle)
+			else
 			{
 				event.setCancelled(true);
 			}
 		}
-		else if (event.getItem().getType() == Material.FIRE || event.getItem().getType() == Material.FIREBALL)
+		else if((EXP_Bottle && event.getItem().getType() == Material.EXP_BOTTLE) || (FireCharge && (event.getItem().getType() == Material.FIRE || event.getItem().getType() == Material.FIREBALL)) ||
+				(Pumpkin && (event.getItem().getType() == Material.PUMPKIN || event.getItem().getType() == Material.JACK_O_LANTERN)))
 		{
-			if(FireCharge)
-			{
-				event.setCancelled(true);
-			}
+			event.setCancelled(true);
 		}
 	}
 }
