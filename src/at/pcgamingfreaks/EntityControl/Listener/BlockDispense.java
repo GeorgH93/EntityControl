@@ -35,13 +35,13 @@ public class BlockDispense implements Listener
 	
 	public BlockDispense(EntityControl plugin)
 	{
-		checkChickenEgg  = plugin.config.GetDispenserBlock("ChickenEgg");
-		checkSpawnEgg    = plugin.config.GetDispenserBlock("SpawnEgg");
-		dispenseSnowball = plugin.config.GetDispenserBlock("dispenseSnowball");
-		checkEXP_Bottle  = plugin.config.GetDispenserBlock("EXP_Bottle");
-		checkFireCharge  = plugin.config.GetDispenserBlock("Fire");
-		checkPumpkin     = plugin.config.GetDispenserBlock("Pumpkin");
-		ignoreWorlds     = plugin.config.GetDispenserIgnoreWorlds();
+		checkChickenEgg  = plugin.config.getDispenserBlock("ChickenEgg");
+		checkSpawnEgg    = plugin.config.getDispenserBlock("SpawnEgg");
+		dispenseSnowball = plugin.config.getDispenserBlock("dispenseSnowball");
+		checkEXP_Bottle  = plugin.config.getDispenserBlock("EXP_Bottle");
+		checkFireCharge  = plugin.config.getDispenserBlock("Fire");
+		checkPumpkin     = plugin.config.getDispenserBlock("Pumpkin");
+		ignoreWorlds     = plugin.config.getDispenserIgnoreWorlds();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)

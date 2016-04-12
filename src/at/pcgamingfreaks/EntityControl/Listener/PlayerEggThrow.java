@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2014-2016 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -28,34 +28,31 @@ import at.pcgamingfreaks.EntityControl.EntityControl;
 
 public class PlayerEggThrow implements Listener
 {
-	private EntityControl plugin;
+	private boolean blockCreativeOnly;
+	private String messageNoChickenEgg;
+	private HashSet<String> ignoredWorlds;
 	
-	private boolean BlockCreativeOnly;
-	private String Message_NoChickenEgg;
-	private HashSet<String> IgnoreWorlds;
-	
-	public PlayerEggThrow(EntityControl ec)
+	public PlayerEggThrow(EntityControl plugin)
 	{
-		plugin = ec;
-		
-		BlockCreativeOnly = plugin.config.GetEggBlockCreativeOnly();
-		Message_NoChickenEgg = EntityControl.lang.Get("Egg.ChickenEgg");
-		IgnoreWorlds = plugin.config.GetEggsIgnoreWorlds();
+		blockCreativeOnly = plugin.config.getEggBlockCreativeOnly();
+		messageNoChickenEgg = EntityControl.lang.get("Egg.ChickenEgg");
+		ignoredWorlds = plugin.config.getEggsIgnoreWorlds();
 	}
 	
 	@EventHandler
 	public void onEggThrow(PlayerEggThrowEvent event)
 	{
+		//noinspection SpellCheckingInspection
 		if(!event.getPlayer().hasPermission("entitycontrol.chickenegg"))
 		{
-			if(IgnoreWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase()))
+			if(ignoredWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase()))
 			{
 				return;
 			}
-			if(!BlockCreativeOnly || event.getPlayer().getGameMode() == GameMode.CREATIVE)
+			if(!blockCreativeOnly || event.getPlayer().getGameMode() == GameMode.CREATIVE)
 			{
 				event.setHatching(false);
-				event.getPlayer().sendMessage(Message_NoChickenEgg);
+				event.getPlayer().sendMessage(messageNoChickenEgg);
 			}
 		}
 	}

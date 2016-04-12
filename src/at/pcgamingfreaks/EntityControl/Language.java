@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2014-2015 GeorgH93
+ *   Copyright (C) 2014-2016 GeorgH93
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -27,51 +27,46 @@ import com.google.common.io.Files;
 
 public class Language
 {
-	private EntityControl EC;
+	private EntityControl plugin;
 	private FileConfiguration lang;
 	private static final int LANG_VERSION = 1;
 
-	public Language(EntityControl ec) 
+	public Language(EntityControl plugin)
 	{
-		EC = ec;
-		LoadFile();
+		this.plugin = plugin;
+		loadFile();
 	}
 	
-	public String Get(String Option)
+	public String get(String Option)
 	{
 		return lang.getString("Language." + Option);
 	}
 	
-	public void Reload()
+	private void loadFile()
 	{
-		LoadFile();
-	}
-	
-	private void LoadFile()
-	{
-		File file = new File(EC.getDataFolder() + File.separator + "Lang", EC.config.GetLanguage()+".yml");
+		File file = new File(plugin.getDataFolder() + File.separator + "Lang", plugin.config.getLanguage()+".yml");
 		if(!file.exists())
 		{
-			ExtractLangFile(file);
+			extractLangFile(file);
 		}
 		lang = YamlConfiguration.loadConfiguration(file);
-		UpdateLangFile(file);
+		updateLangFile(file);
 	}
 	
-	private void ExtractLangFile(File Target)
+	private void extractLangFile(File Target)
 	{
 		try
 		{
-			EC.saveResource("Lang" + File.separator + EC.config.GetLanguage() + ".yml", true);
+			plugin.saveResource("Lang" + File.separator + plugin.config.getLanguage() + ".yml", true);
 		}
 		catch(Exception ex)
 		{
 			try
 			{
-				File file_en = new File(EC.getDataFolder() + File.separator + "Lang", "en.yml");
+				File file_en = new File(plugin.getDataFolder() + File.separator + "Lang", "en.yml");
 				if(!file_en.exists())
 				{
-					EC.saveResource("Lang" + File.separator + "en.yml", true);
+					plugin.saveResource("Lang" + File.separator + "en.yml", true);
 				}
 				Files.copy(file_en, Target);
 			}
@@ -82,15 +77,15 @@ public class Language
 		}
 	}
 	
-	private boolean UpdateLangFile(File file)
+	private boolean updateLangFile(File file)
 	{
 		if(lang.getInt("Version") != LANG_VERSION)
 		{
-			if(EC.config.GetLanguageUpdateMode().equalsIgnoreCase("overwrite"))
+			if(plugin.config.getLanguageUpdateMode().equalsIgnoreCase("overwrite"))
 			{
-				ExtractLangFile(file);
-				LoadFile();
-				EC.log.info(Get("Console.LangUpdated"));
+				extractLangFile(file);
+				loadFile();
+				plugin.log.info(get("Console.LangUpdated"));
 				return true;
 			}
 			else
@@ -99,13 +94,13 @@ public class Language
 				{
 					case 0:
 						break;
-					default: EC.log.warning("Language File Version newer than expected!"); return false;
+					default: plugin.log.warning("Language File Version newer than expected!"); return false;
 				}
 				lang.set("Version", LANG_VERSION);
 				try 
 				{
 					lang.save(file);
-					EC.log.info(Get("Console.LangUpdated"));
+					plugin.log.info(get("Console.LangUpdated"));
 				}
 		  	  	catch (IOException e) 
 		  	  	{

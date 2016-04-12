@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2014-2016 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -34,36 +34,32 @@ import at.pcgamingfreaks.EntityControl.MobType;
 
 public class PlayerInteract implements Listener
 {
-	private EntityControl plugin;
-	
-	private boolean BlockCreativeOnly, Timed;
-	private long interval, cleanInterval;
-	private int maxperday;
+	private boolean blockCreativeOnly, timed;
+	private long interval;
+	private int maxPerDay;
 	private Date lastClean;
-	private HashSet<Integer> AllowedIDs = new HashSet<>();
+	private HashSet<Integer> allowedIDs = new HashSet<>();
 	private HashMap<UUID, Integer> count = new HashMap<>();
 	private HashMap<UUID, Date> last = new HashMap<>();
-	private HashSet<String> IgnoreWorlds;
-	private String Message_SpawnEgg, Message_Cooldown, Message_DayMax;
+	private HashSet<String> ignoredWorlds;
+	private String messageSpawnEgg, messageCooldown, messageDayMax;
 	
-	public PlayerInteract(EntityControl ec)
+	public PlayerInteract(EntityControl plugin)
 	{
-		plugin = ec;
-		
-		BlockCreativeOnly = plugin.config.GetEggBlockCreativeOnly();
-		for(Object o : plugin.config.GetSpawnEggAllowedIDs())
+		blockCreativeOnly = plugin.config.getEggBlockCreativeOnly();
+		for(Object o : plugin.config.getSpawnEggAllowedIDs())
 		{
 			try
 			{
-				AllowedIDs.add(Integer.parseInt(o.toString(), 10));
+				allowedIDs.add(Integer.parseInt(o.toString(), 10));
 			}
-			catch(Exception e) {}
+			catch(Exception ignored) {}
 		}
-		Timed = plugin.config.GetSpawnEggTimedEnabled();
-		interval = plugin.config.GetSpawnEggTimedInterval() * 1000L;
-		cleanInterval = plugin.config.GetSpawnEggTimedCleanInterval() * 20L;
-		maxperday = plugin.config.GetSpawnEggTimedMexPerDay();
-		if(Timed)
+		timed = plugin.config.getSpawnEggTimedEnabled();
+		interval = plugin.config.getSpawnEggTimedInterval() * 1000L;
+		long cleanInterval = plugin.config.getSpawnEggTimedCleanInterval() * 20L;
+		maxPerDay = plugin.config.getSpawnEggTimedMexPerDay();
+		if(timed)
 		{
 			lastClean = new Date();
 			plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin,
@@ -80,10 +76,10 @@ public class PlayerInteract implements Listener
 					}
 				}, cleanInterval, cleanInterval);
 		}
-		IgnoreWorlds = plugin.config.GetLimiterIgnoreWorlds();
-		Message_SpawnEgg = EntityControl.lang.Get("Egg.SpawnEgg");
-		Message_Cooldown = EntityControl.lang.Get("Egg.TimedCooldown");
-		Message_DayMax = EntityControl.lang.Get("Egg.TimedMaxPerDay");
+		ignoredWorlds = plugin.config.getLimiterIgnoreWorlds();
+		messageSpawnEgg = EntityControl.lang.get("Egg.SpawnEgg");
+		messageCooldown = EntityControl.lang.get("Egg.TimedCooldown");
+		messageDayMax = EntityControl.lang.get("Egg.TimedMaxPerDay");
 	}
 	
 	@EventHandler
@@ -93,20 +89,20 @@ public class PlayerInteract implements Listener
 		{
 			return;
 		}
-		if(IgnoreWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase()))
+		if(ignoredWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase()))
 		{
 			return;
 		}
 		Player p = event.getPlayer();
-		if(!BlockCreativeOnly || p.getGameMode() == GameMode.CREATIVE)
+		if(!blockCreativeOnly || p.getGameMode() == GameMode.CREATIVE)
 		{
 			if(p.getItemInHand().getType() == Material.MONSTER_EGG || p.getItemInHand().getType() == Material.MONSTER_EGGS)
 			{
 				MobType type = MobType.getMobTypeFromId(p.getItemInHand().getDurability());
-				if(AllowedIDs.contains(type.getEntityId()))
+				if(allowedIDs.contains(type.getEntityId()))
 				{
 					// Timed Check
-					if(Timed)
+					if(timed)
 					{
 						Integer ct = count.get(p.getUniqueId());
 						int c = 0;
@@ -114,10 +110,10 @@ public class PlayerInteract implements Listener
 						{
 							c = ct;
 						}
-						if(c >= maxperday && !p.hasPermission("entitycontrol.egg.timed.nolimit"))
+						if(c >= maxPerDay && !p.hasPermission("entitycontrol.egg.timed.nolimit"))
 						{
 							event.setCancelled(true);
-							p.sendMessage(Message_DayMax);
+							p.sendMessage(messageDayMax);
 						}
 						else
 						{
@@ -125,13 +121,13 @@ public class PlayerInteract implements Listener
 							if(temp == null || temp.getTime() < (new Date().getTime() - interval) || p.hasPermission("entitycontrol.egg.timed.nocd"))
 							{
 								c++;
-								count.put(p.getUniqueId(), new Integer(c));
+								count.put(p.getUniqueId(), c);
 								last.put(p.getUniqueId(), new Date());
 							}
 							else
 							{
 								event.setCancelled(true);
-								p.sendMessage(Message_Cooldown);
+								p.sendMessage(messageCooldown);
 							}
 						}
 					}
@@ -141,7 +137,7 @@ public class PlayerInteract implements Listener
 					if(!p.hasPermission("entitycontrol.egg." + type.getCategory().name().toLowerCase() + "." + type.getPermName()))
 					{
 						event.setCancelled(true);
-						p.sendMessage(String.format(Message_SpawnEgg, type.getName()));
+						p.sendMessage(String.format(messageSpawnEgg, type.getName()));
 					}
 				}
 			}

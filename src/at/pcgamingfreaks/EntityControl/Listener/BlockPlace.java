@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2014-2016 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,60 +30,52 @@ import at.pcgamingfreaks.EntityControl.EntityControl;
 
 public class BlockPlace implements Listener
 {
-	private EntityControl plugin;
+	private String messageIronGolem, messageSnowGolem, messageWither;
+	private boolean checkIronGolem, checkSnowGolem, checkWither;
+	private HashSet<String> ignoreWorlds;
 	
-	private String IronGolem, SnowGolem, Wither;
-	private boolean ironGolem, snowGolem, wither;
-	private HashSet<String> IgnoreWorlds;
-	
-	public BlockPlace(EntityControl ec)
+	public BlockPlace(EntityControl plugin)
 	{
-		plugin = ec;
-		
-		IronGolem = EntityControl.lang.Get("Build.IronGolem");
-		SnowGolem = EntityControl.lang.Get("Build.SnowGolem");
-		Wither    = EntityControl.lang.Get("Build.Wither");
-		ironGolem = plugin.config.GetBuild("IronGolem");
-		snowGolem = plugin.config.GetBuild("SnowGolem");
-		wither = plugin.config.GetBuild("Wither");
-		IgnoreWorlds = plugin.config.GetBuildIgnoreWorlds();
+		messageIronGolem = EntityControl.lang.get("Build.IronGolem");
+		messageSnowGolem = EntityControl.lang.get("Build.SnowGolem");
+		messageWither = EntityControl.lang.get("Build.Wither");
+		checkIronGolem = plugin.config.getBuild("IronGolem");
+		checkSnowGolem = plugin.config.getBuild("SnowGolem");
+		checkWither = plugin.config.getBuild("Wither");
+		ignoreWorlds = plugin.config.getBuildIgnoreWorlds();
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void OnBlockPlace(BlockPlaceEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
 		Player player = event.getPlayer();
 	    Location Loc = event.getBlock().getLocation();
-	    if(IgnoreWorlds.contains(Loc.getWorld().getName().toLowerCase()))
+	    if(ignoreWorlds.contains(Loc.getWorld().getName().toLowerCase()))
 		{
 			return;
 		}
 	    if(event.getBlock().getType() == Material.PUMPKIN || event.getBlock().getType() == Material.JACK_O_LANTERN)
 	    {
-		    if (ironGolem && !player.hasPermission("entitycontrol.build.irongolem"))
+		    if (checkIronGolem && !player.hasPermission("entitycontrol.build.irongolem"))
 		    {
 		    	if(Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-1, Loc.getBlockZ()).getType() == Material.IRON_BLOCK
 		    		&& Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-2, Loc.getBlockZ()).getType() == Material.IRON_BLOCK)
 		    	{
 		    		event.setCancelled(true);
-		    		player.sendMessage(IronGolem);
+		    		player.sendMessage(messageIronGolem);
 		    	}
 		    }
-		    if(snowGolem && !player.hasPermission("entitycontrol.build.snowgolem"))
+		    if(checkSnowGolem && !player.hasPermission("entitycontrol.build.snowgolem"))
 		    {
 		    	if(Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-1, Loc.getBlockZ()).getType() == Material.SNOW_BLOCK
 			    		&& Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-2, Loc.getBlockZ()).getType() == Material.SNOW_BLOCK)
 		    	{
 		    		event.setCancelled(true);
-		    		player.sendMessage(SnowGolem);
+		    		player.sendMessage(messageSnowGolem);
 		    	}
 		    }
 	    }
-	    if(wither && !player.hasPermission("entitycontrol.build.wither"))
+	    if(checkWither && !player.hasPermission("entitycontrol.build.wither"))
 	    {
 	    	if(((event.getBlock().getType() == Material.SKULL || event.getBlock().getType() == Material.SKULL_ITEM)
 	    		&& Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY() - 1, Loc.getBlockZ()).getType() == Material.SOUL_SAND)
@@ -92,7 +84,7 @@ public class BlockPlace implements Listener
 	    		|| Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()+1, Loc.getBlockZ()).getType() == Material.SKULL_ITEM)))
 	    	{
 	    		event.setCancelled(true);
-	    		player.sendMessage(Wither);
+	    		player.sendMessage(messageWither);
 	    	}
 	    }
 	}

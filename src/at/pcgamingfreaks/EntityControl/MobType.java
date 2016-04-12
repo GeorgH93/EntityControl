@@ -59,7 +59,7 @@ public enum MobType
     {
     	id = ID;
     	category = Category;
-    	name = EntityControl.lang.Get("Entity.EID" + ID);
+    	name = EntityControl.lang.get("Entity.EID" + ID);
     }
 
     public int getEntityId()

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2014-2016 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -42,47 +42,49 @@ public class EntityControl extends JavaPlugin
 	public Config config = new Config(this);
 	public static Language lang;
 
+	@Override
 	public void onEnable()
 	{
 		lang = new Language(this);
 
-		notifyPlayers = config.GetLimiterNotifyPlayers();
-		surroundingChunks = config.GetLimiterCheckSurroundingChunks();
-		message_RemovedEntites = lang.Get("RemovedEntites");
+		notifyPlayers = config.getLimiterNotifyPlayers();
+		surroundingChunks = config.getLimiterCheckSurroundingChunks();
+		message_RemovedEntites = lang.get("RemovedEntites");
 		
-		RegisterEvents();
+		registerEvents();
 		
 		log.info("Entity Control finished loading and is now watching all the entitys");
 	}
 
-	public void RegisterEvents()
+	public void registerEvents()
 	{
-		if(config.GetBuildEnabled())
+		if(config.getBuildEnabled())
 		{
 			getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
 		}
-		if(config.GetDispenserEnabled())
+		if(config.getDispenserEnabled())
 		{
 			getServer().getPluginManager().registerEvents(new BlockDispense(this), this);
 		}
-		if(config.GetChickenEggEnabled())
+		if(config.getChickenEggEnabled())
 		{
 			getServer().getPluginManager().registerEvents(new PlayerEggThrow(this), this);
 		}
-		if(config.GetSpawnEggEnabled())
+		if(config.getSpawnEggEnabled())
 		{
 			getServer().getPluginManager().registerEvents(new PlayerInteract(this), this);
 		}
-		if(config.GetLimiterEnabled())
+		if(config.getLimiterEnabled())
 		{
-			if(config.GetLimiterEnabledOnSpawn())
+			if(config.getLimiterEnabledOnSpawn())
 			{
 				getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this);
 			}
 			getServer().getPluginManager().registerEvents(new ChunkLoad(this), this);
 		}
 	}
-	
+
+	@Override
 	public void onDisable()
 	{
 	    getServer().getScheduler().cancelTasks(this);
@@ -95,10 +97,10 @@ public class EntityControl extends JavaPlugin
 	private int surroundingChunks;
 	private String message_RemovedEntites;
 	
-	public void CheckChunks(Location loc)
+	public void checkChunks(Location loc)
 	{
 		Chunk c = loc.getChunk();
-		CheckChunk(c);
+		checkChunk(c);
 		if(surroundingChunks > 0)
 		{
 			World w = loc.getWorld();
@@ -106,13 +108,13 @@ public class EntityControl extends JavaPlugin
 		    {
 		    	for(int z = c.getZ() + surroundingChunks; z >= c.getZ() - surroundingChunks; z--)
 		    	{
-		    		CheckChunk(w.getChunkAt(x, z));
+		    		checkChunk(w.getChunkAt(x, z));
 		        }
 		    }
 		}
 	}
 	
-	public void CheckChunk(Chunk c)
+	public void checkChunk(Chunk c)
 	{
 		if(!c.isLoaded())
 		{
@@ -128,7 +130,7 @@ public class EntityControl extends JavaPlugin
 	    	}
 		    String eType = entities[i].getType().toString();
 		    String eGroup = getMobGroup(entities[i]);
-		    if(config.GetLimiterMaxEntitiesContains(eType))
+		    if(config.getLimiterMaxEntitiesContains(eType))
 		    {
 		    	if (!types.containsKey(eType))
 		    	{
@@ -136,7 +138,7 @@ public class EntityControl extends JavaPlugin
 		        }
 		        types.get(eType).add(entities[i]);
 		    }
-		    if(config.GetLimiterMaxEntitiesContains(eGroup))
+		    if(config.getLimiterMaxEntitiesContains(eGroup))
 		    {
 		    	if (!types.containsKey(eGroup))
 		    	{
@@ -148,7 +150,7 @@ public class EntityControl extends JavaPlugin
 		for(Map.Entry<String, ArrayList<Entity>> entry : types.entrySet())
 		{
 			String eType = entry.getKey();
-		    int limit = config.GetLimiterMaxEntities(eType);
+		    int limit = config.getLimiterMaxEntities(eType);
 		    if(entry.getValue().size() > limit)
 		    {
 		        if(notifyPlayers)

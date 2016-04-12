@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2014-2016 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import at.pcgamingfreaks.EntityControl.EntityControl;
 
@@ -33,37 +33,34 @@ public class ChunkLoad implements Listener
 {
 	private EntityControl plugin;
 	
-	private HashMap<Chunk, Integer> chunkTasks = new HashMap<>();
+	private HashMap<Chunk, BukkitTask> chunkTasks = new HashMap<>();
 	private long interval;
 	private boolean chunkRecheck, onLoadCheck;
-	private HashSet<String> IgnoreWorlds;
+	private HashSet<String> ignoreWorlds;
 	
-	public ChunkLoad(EntityControl ec)
+	public ChunkLoad(EntityControl plugin)
 	{
-		plugin = ec;
-		chunkRecheck = plugin.config.GetLimiterChunkRecheck();
-		interval = plugin.config.GetLimiterChunkRecheckInterval() * 20L;
-		onLoadCheck = plugin.config.GetLimiterEnabledOnChunkLoad();
-		IgnoreWorlds = plugin.config.GetLimiterIgnoreWorlds();
+		this.plugin = plugin;
+		chunkRecheck = this.plugin.config.getLimiterChunkRecheck();
+		interval = this.plugin.config.getLimiterChunkRecheckInterval() * 20L;
+		onLoadCheck = this.plugin.config.getLimiterEnabledOnChunkLoad();
+		ignoreWorlds = this.plugin.config.getLimiterIgnoreWorlds();
 	}
 	
 	@EventHandler
 	public void onChunkLoadEvent(ChunkLoadEvent event)
 	{
-		if(IgnoreWorlds.contains(event.getWorld().getName().toLowerCase()))
+		if(ignoreWorlds.contains(event.getWorld().getName().toLowerCase()))
 		{
 			return;
 		}
 		if(chunkRecheck)
 	    {
-			inspectTask task = new inspectTask(event.getChunk());
-			int taskID = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, task, interval, interval);
-			task.setId(taskID);
-			chunkTasks.put(event.getChunk(), taskID);
+			chunkTasks.put(event.getChunk(), plugin.getServer().getScheduler().runTaskTimer(plugin, new Checker(event.getChunk()), interval, interval));
 	    }
 		if(onLoadCheck)
 		{
-			plugin.CheckChunk(event.getChunk());
+			plugin.checkChunk(event.getChunk());
 		}
 	}
 	
@@ -72,34 +69,30 @@ public class ChunkLoad implements Listener
 	{
 		if(chunkTasks.containsKey(e.getChunk()))
 	    {
-			plugin.getServer().getScheduler().cancelTask(chunkTasks.get(e.getChunk()));
+		    chunkTasks.get(e.getChunk()).cancel();
 			chunkTasks.remove(e.getChunk());
 	    }
 	}
 	
-	class inspectTask extends BukkitRunnable
+	class Checker implements Runnable
 	{
-		Chunk c;
-		int taskID;
+		private Chunk chunk;
 		
-		public inspectTask(Chunk C)
+		public Checker(Chunk chunk)
 		{
-			c = C;
+			this.chunk = chunk;
 		}
-    
+
+		@Override
 		public void run()
 		{
-			if(!c.isLoaded())
+			if(!chunk.isLoaded())
 			{
-				plugin.getServer().getScheduler().cancelTask(taskID);
+				chunkTasks.get(chunk).cancel();
+				chunkTasks.remove(chunk);
 				return;
 			}
-			plugin.CheckChunk(c);
-		}
-    
-		public void setId(int TaskID)
-		{
-			taskID = TaskID;
+			plugin.checkChunk(chunk);
 		}
 	}
 }
