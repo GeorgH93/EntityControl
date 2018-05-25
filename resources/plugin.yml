@@ -1,7 +1,7 @@
-name: EntityControl
-main: at.pcgamingfreaks.EntityControl.EntityControl
+name: ${name}
+main: ${groupId}.${artifactId}.${artifactId}
 version: ${version}
-author: GeorgH93
+author: ${author}
 permissions:
   entitycontrol.*:
     description: Allows to spawn all entitys
