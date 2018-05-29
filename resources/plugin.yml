@@ -2,6 +2,7 @@ name: ${name}
 main: ${groupId}.${artifactId}.${artifactId}
 version: ${version}
 author: ${author}
+depend: [PCGF_PluginLib]
 permissions:
   entitycontrol.*:
     description: Allows to spawn all entitys

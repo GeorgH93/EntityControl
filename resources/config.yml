@@ -1,0 +1,67 @@
+Language: en
+LanguageUpdateMode: Overwrite
+Eggs:
+  Chicken:
+    Enable: true
+  BlockCreativeOnly: true
+  Spawn:
+    Enable: true
+    AllowedIDs: []
+    Timed:
+      Enable: false
+      Interval: 60
+      MaxPerDay: 3
+      CleanInterval: 3600
+  IgnoreWorlds: []
+Build:
+  Enable: true
+  Wither: true
+  SnowGolem: true
+  IronGolem: true
+  IgnoreWorlds: []
+Dispenser:
+  Enable: true
+  Block:
+    ChickenEgg: true
+    SpawnEgg: true
+    dispenseSnowball: true
+    Fire: true
+    EXP_Bottle: true
+    Pumpkin: true
+  IgnoreWorlds: []
+Limiter:
+  Enable: true
+  EnableOnSpawn: true
+  CheckSurroundingChunks: 1
+  EnableOnChunkLoad: true
+  ChunkRecheck: true
+  ChunkRecheckInterval: 300
+  NotifyPlayers: false
+  spawn-reasons:
+    NATURAL: true
+    JOCKEY: true
+    CHUNK_GEN: true
+    SPAWNER: true
+    EGG: true
+    SPAWNER_EGG: true
+    LIGHTNING: true
+    BED: true
+    BUILD_SNOWMAN: true
+    BUILD_IRONGOLEM: true
+    BUILD_WITHER: true
+    VILLAGE_DEFENSE: true
+    VILLAGE_INVASION: true
+    BREEDING: true
+    SLIME_SPLIT: true
+    REINFORCEMENTS: true
+    CUSTOM: true
+    DEFAULT: true
+  Entities:
+    ANIMAL: 10
+    MONSTER: 10
+    WATER_MOB: 10
+    AMBIENT: 10
+    NPC: 10
+    OTHER: 10
+  IgnoreWorlds: []
+Version: 2
