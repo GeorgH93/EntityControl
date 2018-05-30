@@ -1,5 +1,7 @@
-Language: en
-LanguageUpdateMode: Overwrite
+Language:
+  Language: en
+  UpdateMode: Overwrite
+
 Eggs:
   Chicken:
     Enable: true
@@ -64,4 +66,5 @@ Limiter:
     NPC: 10
     OTHER: 10
   IgnoreWorlds: []
+
 Version: 2

@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,262 +17,150 @@
 
 package at.pcgamingfreaks.EntityControl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import at.pcgamingfreaks.Bukkit.Configuration;
+import at.pcgamingfreaks.YamlFileManager;
+
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-public class Config
+public class Config extends Configuration
 {
-	private FileConfiguration config;
-	private EntityControl plugin;
 	private static final int CONFIG_VERSION = 2;
 	
-	public Config(EntityControl ec)
+	public Config(EntityControl plugin)
 	{
-		plugin = ec;
-		loadConfig();
+		super(plugin, CONFIG_VERSION, CONFIG_VERSION);
+		languageKey = "Language.Language";
+		languageUpdateKey = "Language.UpdateMode";
 	}
-	
-	public void reload()
+
+	@Override
+	protected void doUpdate()
 	{
-		loadConfig();
+		// Nothing to update yet
 	}
-	
-	private void loadConfig()
+
+	@Override
+	protected void doUpgrade(YamlFileManager oldConfig)
 	{
-		File file = new File(plugin.getDataFolder(), "config.yml");
-		if(!file.exists())
-		{
-			newConfig(file);
-		}
-		else
-		{
-			config = YamlConfiguration.loadConfiguration(file);
-			updateConfig(file);
-		}
-	}
-	
-	private void newConfig(File file)
-	{
-		config = new YamlConfiguration();
-		
-		config.set("Language", "en");
-		config.set("LanguageUpdateMode", "Overwrite");
-		
-		config.set("Eggs.Chicken.Enable",				true);
-		config.set("Eggs.BlockCreativeOnly",			true);
-		config.set("Eggs.Spawn.Enable",					true);
-		config.set("Eggs.Spawn.AllowedIDs",				new ArrayList<Integer>());
-		config.set("Eggs.Spawn.Timed.Enable",			false);
-		config.set("Eggs.Spawn.Timed.Interval",			60); // In seconds
-		config.set("Eggs.Spawn.Timed.MaxPerDay",		3);
-		config.set("Eggs.Spawn.Timed.CleanInterval",	3600); // In seconds
-		config.set("Eggs.IgnoreWorlds",					new ArrayList<String>());
-		config.set("Build.Enable",						true);
-		config.set("Build.Wither",						true);
-		config.set("Build.SnowGolem",					true);
-		config.set("Build.IronGolem",					true);
-		config.set("Build.IgnoreWorlds",				new ArrayList<String>());
-		config.set("Dispenser.Enable",					true);
-		config.set("Dispenser.Block.ChickenEgg",		true);
-		config.set("Dispenser.Block.SpawnEgg",			true);
-		config.set("Dispenser.Block.dispenseSnowball",	true);
-		config.set("Dispenser.Block.Fire",				true);
-		config.set("Dispenser.Block.EXP_Bottle",		true);
-		config.set("Dispenser.Block.Pumpkin",           true);
-		config.set("Dispenser.IgnoreWorlds",			new ArrayList<String>());
-		config.set("Limiter.Enable",					true);
-		config.set("Limiter.EnableOnSpawn",				true);
-		config.set("Limiter.CheckSurroundingChunks",	1);
-		config.set("Limiter.EnableOnChunkLoad",			true);
-		config.set("Limiter.ChunkRecheck",				true);
-		config.set("Limiter.ChunkRecheckInterval",		300); // In seconds
-		config.set("Limiter.NotifyPlayers",				false);
-		config.set("Limiter.spawn-reasons.NATURAL",		true);
-		config.set("Limiter.spawn-reasons.JOCKEY",		true);
-		config.set("Limiter.spawn-reasons.CHUNK_GEN",	true);
-		config.set("Limiter.spawn-reasons.SPAWNER",		true);
-		config.set("Limiter.spawn-reasons.EGG",			true);
-		config.set("Limiter.spawn-reasons.SPAWNER_EGG",	true);
-		config.set("Limiter.spawn-reasons.LIGHTNING",	true);
-		config.set("Limiter.spawn-reasons.BED",			true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.BUILD_SNOWMAN",	true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.BUILD_IRONGOLEM",	true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.BUILD_WITHER",	true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.VILLAGE_DEFENSE",	true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.VILLAGE_INVASION",true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.BREEDING",		true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.SLIME_SPLIT",		true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.REINFORCEMENTS",	true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.CUSTOM",		true); // Deprecated Spawn Reason
-		config.set("Limiter.spawn-reasons.DEFAULT",		true); // Deprecated Spawn Reason
-		config.set("Limiter.Entities.ANIMAL",			10);
-		config.set("Limiter.Entities.MONSTER",			10);
-		config.set("Limiter.Entities.WATER_MOB",		10);
-		config.set("Limiter.Entities.AMBIENT",			10);
-		config.set("Limiter.Entities.NPC",				10);
-		config.set("Limiter.Entities.OTHER",			10);
-		config.set("Limiter.IgnoreWorlds",				new ArrayList<String>());
-		
-		config.set("Version",CONFIG_VERSION);
-		
-		try
-		{
-			config.save(file);
-			plugin.log.info("Config File has been generated.");
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	private boolean updateConfig(File file)
-	{
-		switch(config.getInt("Version"))
-		{
-			case 1: config.set("Dispenser.Block.Pumpkin", true);
-				break;
-			case CONFIG_VERSION: return false;
-			default: plugin.log.info("Config File Version newer than expected!"); return false;
-		}
-		config.set("Version", CONFIG_VERSION);
-		try
-		{
-			config.save(file);
-			plugin.log.info("Config File has been updated.");
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
-	public String getLanguage()
-	{
-		return config.getString("Language");
-	}
-	
-	public String getLanguageUpdateMode()
-	{
-		return config.getString("LanguageUpdateMode");
+		super.doUpgrade(oldConfig);
 	}
 	
 	public boolean getBuildEnabled()
 	{
-		return config.getBoolean("Build.Enable");
+		return getConfig().getBoolean("Build.Enable", true);
 	}
 	
 	public boolean getBuild(String str)
 	{
-		return config.getBoolean("Build." + str);
+		return getConfig().getBoolean("Build." + str, true);
 	}
 	
 	public boolean getSpawnEggEnabled()
 	{
-		return config.getBoolean("Eggs.Spawn.Enable");
+		return getConfig().getBoolean("Eggs.Spawn.Enable", true);
 	}
 	
-	public List<?> getSpawnEggAllowedIDs()
+	public Collection<Integer> getSpawnEggAllowedIDs()
 	{
-		return config.getList("Eggs.Spawn.AllowedIDs");
+		Collection<Integer> allowedIds = new LinkedList<>();
+		for(String id : getConfig().getStringList("Eggs.Spawn.AllowedIDs", new LinkedList<>()))
+		{
+			allowedIds.add(Integer.parseInt(id));
+		}
+		return allowedIds;
 	}
 	
 	public boolean getSpawnEggTimedEnabled()
 	{
-		return config.getBoolean("Eggs.Spawn.Timed.Enable");
+		return getConfig().getBoolean("Eggs.Spawn.Timed.Enable", true);
 	}
 	
 	public long getSpawnEggTimedInterval()
 	{
-		return config.getLong("Eggs.Spawn.Timed.Interval");
+		return getConfig().getLong("Eggs.Spawn.Timed.Interval", 60);
 	}
 	
 	public int getSpawnEggTimedMexPerDay()
 	{
-		return config.getInt("Eggs.Spawn.Timed.MaxPerDay");
+		return getConfig().getInt("Eggs.Spawn.Timed.MaxPerDay", 3);
 	}
 	
 	public long getSpawnEggTimedCleanInterval()
 	{
-		return config.getLong("Eggs.Spawn.Timed.CleanInterval");
+		return getConfig().getLong("Eggs.Spawn.Timed.CleanInterval", 3600);
 	}
 	
 	public boolean getChickenEggEnabled()
 	{
-		return config.getBoolean("Eggs.Chicken.Enable");
+		return getConfig().getBoolean("Eggs.Chicken.Enable", true);
 	}
 	
 	public boolean getEggBlockCreativeOnly()
 	{
-		return config.getBoolean("Eggs.BlockCreativeOnly");
+		return getConfig().getBoolean("Eggs.BlockCreativeOnly", true);
 	}
 	
 	public boolean getDispenserEnabled()
 	{
-		return config.getBoolean("Dispenser.Enable");
+		return getConfig().getBoolean("Dispenser.Enable", true);
 	}
 	
 	public boolean getDispenserBlock(String str)
 	{
-		return config.getBoolean("Dispenser.Block." + str);
+		return getConfig().getBoolean("Dispenser.Block." + str, true);
 	}
 	
 	public boolean getLimiterEnabled()
 	{
-		return config.getBoolean("Limiter.Enable");
+		return getConfig().getBoolean("Limiter.Enable", true);
 	}
 	
 	public boolean getLimiterEnabledOnSpawn()
 	{
-		return config.getBoolean("Limiter.EnableOnSpawn");
+		return getConfig().getBoolean("Limiter.EnableOnSpawn", true);
 	}
 	
 	public boolean getLimiterEnabledOnChunkLoad()
 	{
-		return config.getBoolean("Limiter.EnableOnChunkLoad");
+		return getConfig().getBoolean("Limiter.EnableOnChunkLoad", true);
 	}
 	
 	public boolean getLimiterSpawnReason(String str)
 	{
-		return config.getBoolean("Limiter.spawn-reasons." + str);
+		return getConfig().getBoolean("Limiter.spawn-reasons." + str, true);
 	}
 	
 	public boolean getLimiterNotifyPlayers()
 	{
-		return config.getBoolean("Limiter.NotifyPlayers", false);
+		return getConfig().getBoolean("Limiter.NotifyPlayers", false);
 	}
 	
 	public boolean getLimiterMaxEntitiesContains(String str)
 	{
-		return config.contains("Limiter.Entities." + str);
+		return getConfig().getInt("Limiter.Entities." + str, -1) >= 0;
 	}
 	
 	public int getLimiterMaxEntities(String str)
 	{
-		return config.getInt("Limiter.Entities." + str);
+		return getConfig().getInt("Limiter.Entities." + str, 10);
 	}
 	
 	public int getLimiterCheckSurroundingChunks()
 	{
-		return config.getInt("Limiter.CheckSurroundingChunks", 1);
+		return getConfig().getInt("Limiter.CheckSurroundingChunks", 1);
 	}
 	
 	public boolean getLimiterChunkRecheck()
 	{
-		return config.getBoolean("Limiter.ChunkRecheck", false);
+		return getConfig().getBoolean("Limiter.ChunkRecheck", false);
 	}
 	
 	public long getLimiterChunkRecheckInterval()
 	{
-		return config.getLong("Limiter.ChunkRecheckInterval", 300L);
+		return getConfig().getLong("Limiter.ChunkRecheckInterval", 300L);
 	}
 	
 	private HashSet<String> strListToLowerCaseHashSet(List<String> sl)
@@ -287,21 +175,21 @@ public class Config
 	
 	public HashSet<String> getLimiterIgnoreWorlds()
 	{
-		return strListToLowerCaseHashSet(config.getStringList("Limiter.IgnoreWorlds"));
+		return strListToLowerCaseHashSet(getConfig().getStringList("Limiter.IgnoreWorlds", new LinkedList<>()));
 	}
 	
 	public HashSet<String> getBuildIgnoreWorlds()
 	{
-		return strListToLowerCaseHashSet(config.getStringList("Build.IgnoreWorlds"));
+		return strListToLowerCaseHashSet(getConfig().getStringList("Build.IgnoreWorlds", new LinkedList<>()));
 	}
 	
 	public HashSet<String> getDispenserIgnoreWorlds()
 	{
-		return strListToLowerCaseHashSet(config.getStringList("Dispenser.IgnoreWorlds"));
+		return strListToLowerCaseHashSet(getConfig().getStringList("Dispenser.IgnoreWorlds", new LinkedList<>()));
 	}
 	
 	public HashSet<String> getEggsIgnoreWorlds()
 	{
-		return strListToLowerCaseHashSet(config.getStringList("Eggs.IgnoreWorlds"));
+		return strListToLowerCaseHashSet(getConfig().getStringList("Eggs.IgnoreWorlds", new LinkedList<>()));
 	}
 }
