@@ -1,5 +1,11 @@
+# Language Settings
 Language:
+  # Defines the used language and the corresponding file used. The corresponding language file will be placed next to the config.yml named: <Language>.yml
   Language: en
+  # Options:
+    #     Overwrite (deletes all changes from the file and extracts a new language file)
+    #     Upgrade (extracts a new language file and copy's all settings from the old language file)
+    #     Update (adds the default (english) text values for all missing values, just some basic formatting)
   UpdateMode: Overwrite
 
 Eggs:
@@ -24,9 +30,10 @@ Build:
 Dispenser:
   Enable: true
   Block:
+    # Replaces spawn eggs with snowballs
+    DispenseSnowball: true
     ChickenEgg: true
     SpawnEgg: true
-    dispenseSnowball: true
     Fire: true
     EXP_Bottle: true
     Pumpkin: true
@@ -39,7 +46,7 @@ Limiter:
   ChunkRecheck: true
   ChunkRecheckInterval: 300
   NotifyPlayers: false
-  spawn-reasons:
+  SpawnReasons:
     NATURAL: true
     JOCKEY: true
     CHUNK_GEN: true
@@ -67,4 +74,5 @@ Limiter:
     OTHER: 10
   IgnoreWorlds: []
 
-Version: 2
+# Config File Version. Don't touch it!
+Version: 3

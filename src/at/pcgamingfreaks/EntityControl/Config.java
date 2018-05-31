@@ -130,7 +130,7 @@ public class Config extends Configuration
 	
 	public boolean getLimiterSpawnReason(String str)
 	{
-		return getConfig().getBoolean("Limiter.spawn-reasons." + str, true);
+		return getConfig().getBoolean("Limiter.SpawnReasons." + str, true);
 	}
 	
 	public boolean getLimiterNotifyPlayers()

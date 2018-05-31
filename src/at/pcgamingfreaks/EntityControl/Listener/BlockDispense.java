@@ -37,7 +37,7 @@ public class BlockDispense implements Listener
 	{
 		checkChickenEgg  = plugin.config.getDispenserBlock("ChickenEgg");
 		checkSpawnEgg    = plugin.config.getDispenserBlock("SpawnEgg");
-		dispenseSnowball = plugin.config.getDispenserBlock("dispenseSnowball");
+		dispenseSnowball = plugin.config.getDispenserBlock("DispenseSnowball");
 		checkEXP_Bottle  = plugin.config.getDispenserBlock("EXP_Bottle");
 		checkFireCharge  = plugin.config.getDispenserBlock("Fire");
 		checkPumpkin     = plugin.config.getDispenserBlock("Pumpkin");
