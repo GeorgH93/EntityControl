@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@ public class CreatureSpawn implements Listener
 	
 	private HashSet<String> IgnoreWorlds;
 	
-	public CreatureSpawn(EntityControl ec)
+	public CreatureSpawn(EntityControl plugin)
 	{
-		plugin = ec;
-		IgnoreWorlds = plugin.config.getLimiterIgnoreWorlds();
+		this.plugin = plugin;
+		IgnoreWorlds = plugin.getConfiguration().getLimiterIgnoreWorlds();
 	}
 	
 	@EventHandler
@@ -49,7 +49,7 @@ public class CreatureSpawn implements Listener
 			return;
 		}
 		String reason = event.getSpawnReason().toString();
-		if(!plugin.config.getLimiterSpawnReason(reason))
+		if(!plugin.getConfiguration().getLimiterSpawnReason(reason))
 		{
 		    return;
 		}

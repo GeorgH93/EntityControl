@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package at.pcgamingfreaks.EntityControl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -38,9 +37,12 @@ import at.pcgamingfreaks.EntityControl.Listener.*;
 
 public class EntityControl extends JavaPlugin
 {
-	public Logger log = getLogger();
-	public Config config = new Config(this);
-	public static Language lang;
+	private static EntityControl instance;
+	private Config config = new Config(this);
+	private Language lang;
+	private boolean notifyPlayers;
+	private int surroundingChunks;
+	private String message_RemovedEntites;
 
 	@Override
 	public void onEnable()
@@ -52,8 +54,9 @@ public class EntityControl extends JavaPlugin
 		message_RemovedEntites = lang.get("RemovedEntites");
 		
 		registerEvents();
-		
-		log.info("Entity Control finished loading and is now watching all the entitys");
+
+		instance = this;
+		getLogger().info("Entity Control finished loading and is now watching all the entitys");
 	}
 
 	public void registerEvents()
@@ -88,15 +91,24 @@ public class EntityControl extends JavaPlugin
 	public void onDisable()
 	{
 	    getServer().getScheduler().cancelTasks(this);
-	    log.info("All running tasks have been stopped. Plugin disabled.");
+		getLogger().info("All running tasks have been stopped. Plugin disabled.");
 	}
-	
-	
-	
-	private boolean notifyPlayers;
-	private int surroundingChunks;
-	private String message_RemovedEntites;
-	
+
+	public Config getConfiguration()
+	{
+		return config;
+	}
+
+	public Language getLanguage()
+	{
+		return lang;
+	}
+
+	public static EntityControl getInstance()
+	{
+		return instance;
+	}
+
 	public void checkChunks(Location loc)
 	{
 		Chunk c = loc.getChunk();
@@ -134,7 +146,7 @@ public class EntityControl extends JavaPlugin
 		    {
 		    	if (!types.containsKey(eType))
 		    	{
-		    		types.put(eType, new ArrayList<Entity>());
+		    		types.put(eType, new ArrayList<>());
 		        }
 		        types.get(eType).add(entities[i]);
 		    }
@@ -142,7 +154,7 @@ public class EntityControl extends JavaPlugin
 		    {
 		    	if (!types.containsKey(eGroup))
 		    	{
-		    		types.put(eGroup, new ArrayList<Entity>());
+		    		types.put(eGroup, new ArrayList<>());
 		        }
 		        types.get(eGroup).add(entities[i]);
 		    }

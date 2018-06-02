@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ public class ChunkLoad implements Listener
 	public ChunkLoad(EntityControl plugin)
 	{
 		this.plugin = plugin;
-		chunkRecheck = this.plugin.config.getLimiterChunkRecheck();
-		interval = this.plugin.config.getLimiterChunkRecheckInterval() * 20L;
-		onLoadCheck = this.plugin.config.getLimiterEnabledOnChunkLoad();
-		ignoreWorlds = this.plugin.config.getLimiterIgnoreWorlds();
+		chunkRecheck = plugin.getConfiguration().getLimiterChunkRecheck();
+		interval = plugin.getConfiguration().getLimiterChunkRecheckInterval() * 20L;
+		onLoadCheck = plugin.getConfiguration().getLimiterEnabledOnChunkLoad();
+		ignoreWorlds = plugin.getConfiguration().getLimiterIgnoreWorlds();
 	}
 	
 	@EventHandler

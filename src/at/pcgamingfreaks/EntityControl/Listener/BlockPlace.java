@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -36,13 +36,13 @@ public class BlockPlace implements Listener
 	
 	public BlockPlace(EntityControl plugin)
 	{
-		messageIronGolem = EntityControl.lang.get("Build.IronGolem");
-		messageSnowGolem = EntityControl.lang.get("Build.SnowGolem");
-		messageWither = EntityControl.lang.get("Build.Wither");
-		checkIronGolem = plugin.config.getBuild("IronGolem");
-		checkSnowGolem = plugin.config.getBuild("SnowGolem");
-		checkWither = plugin.config.getBuild("Wither");
-		ignoreWorlds = plugin.config.getBuildIgnoreWorlds();
+		messageIronGolem = plugin.getLanguage().get("Build.IronGolem");
+		messageSnowGolem = plugin.getLanguage().get("Build.SnowGolem");
+		messageWither = plugin.getLanguage().get("Build.Wither");
+		checkIronGolem = plugin.getConfiguration().getBuild("IronGolem");
+		checkSnowGolem = plugin.getConfiguration().getBuild("SnowGolem");
+		checkWither = plugin.getConfiguration().getBuild("Wither");
+		ignoreWorlds = plugin.getConfiguration().getBuildIgnoreWorlds();
 	}
 	
 	@EventHandler(ignoreCancelled = true)

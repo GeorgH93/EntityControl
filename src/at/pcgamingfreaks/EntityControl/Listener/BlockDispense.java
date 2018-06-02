@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -30,30 +30,30 @@ import at.pcgamingfreaks.EntityControl.EntityControl;
 
 public class BlockDispense implements Listener
 {
-	private boolean checkChickenEgg, checkSpawnEgg, dispenseSnowball, checkEXP_Bottle, checkFireCharge, checkPumpkin;
-	private HashSet<String> ignoreWorlds;
+	private final boolean dispenseSnowball;
+	private final HashSet<String> ignoredWorlds;
+	private final HashSet<Material> blockedMaterials = new HashSet<>();
 	
 	public BlockDispense(EntityControl plugin)
 	{
-		checkChickenEgg  = plugin.config.getDispenserBlock("ChickenEgg");
-		checkSpawnEgg    = plugin.config.getDispenserBlock("SpawnEgg");
-		dispenseSnowball = plugin.config.getDispenserBlock("DispenseSnowball");
-		checkEXP_Bottle  = plugin.config.getDispenserBlock("EXP_Bottle");
-		checkFireCharge  = plugin.config.getDispenserBlock("Fire");
-		checkPumpkin     = plugin.config.getDispenserBlock("Pumpkin");
-		ignoreWorlds     = plugin.config.getDispenserIgnoreWorlds();
+		dispenseSnowball = plugin.getConfiguration().getDispenserBlock("DispenseSnowball");
+		if(plugin.getConfiguration().getDispenserBlock("ChickenEgg")) blockedMaterials.add(Material.EGG);
+		if(plugin.getConfiguration().getDispenserBlock("SpawnEgg")) blockedMaterials.add(Material.MONSTER_EGG);
+		if(plugin.getConfiguration().getDispenserBlock("EXP_Bottle")) blockedMaterials.add(Material.EXP_BOTTLE);
+		if(plugin.getConfiguration().getDispenserBlock("Fire")) blockedMaterials.add(Material.FIRE);
+		if(plugin.getConfiguration().getDispenserBlock("Fire")) blockedMaterials.add(Material.FIREBALL);
+		if(plugin.getConfiguration().getDispenserBlock("Pumpkin")) blockedMaterials.add(Material.PUMPKIN);
+		if(plugin.getConfiguration().getDispenserBlock("Pumpkin")) blockedMaterials.add(Material.JACK_O_LANTERN);
+		ignoredWorlds = plugin.getConfiguration().getDispenserIgnoreWorlds();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled = true)
 	public void onDispense(BlockDispenseEvent event)
 	{
-		if(ignoreWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase()))
+		if(ignoredWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase())) return;
+		if(blockedMaterials.contains(event.getItem().getType()))
 		{
-			return;
-		}
-		if((checkChickenEgg && event.getItem().getType() == Material.EGG) || (checkSpawnEgg && event.getItem().getType() == Material.MONSTER_EGG))
-		{
-			if(dispenseSnowball)
+			if(dispenseSnowball && (event.getItem().getType()== Material.EGG || event.getItem().getType() == Material.MONSTER_EGG))
 			{
 				event.setItem(new ItemStack(Material.SNOW_BALL));
 			}
@@ -61,11 +61,6 @@ public class BlockDispense implements Listener
 			{
 				event.setCancelled(true);
 			}
-		}
-		else if((checkEXP_Bottle && event.getItem().getType() == Material.EXP_BOTTLE) || (checkFireCharge && (event.getItem().getType() == Material.FIRE || event.getItem().getType() == Material.FIREBALL)) ||
-				(checkPumpkin && (event.getItem().getType() == Material.PUMPKIN || event.getItem().getType() == Material.JACK_O_LANTERN)))
-		{
-			event.setCancelled(true);
 		}
 	}
 }

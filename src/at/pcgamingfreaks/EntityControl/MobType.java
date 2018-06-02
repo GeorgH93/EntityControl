@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2015 GeorgH93
+* Copyright (C) 2015, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -51,15 +51,15 @@ public enum MobType
     VILLAGER	(120, MobCategory.NPC),
     UNKNOWN		(0, MobCategory.UNKNOWN);
 
-	private int id = 0;
+	private int id;
 	private String name;
-    private MobCategory category = MobCategory.UNKNOWN;
+    private MobCategory category;
 
     MobType(int ID, MobCategory Category)
     {
     	id = ID;
     	category = Category;
-    	name = EntityControl.lang.get("Entity.EID" + ID);
+    	name = EntityControl.getInstance().getLanguage().get("Entity.EID" + ID);
     }
 
     public int getEntityId()

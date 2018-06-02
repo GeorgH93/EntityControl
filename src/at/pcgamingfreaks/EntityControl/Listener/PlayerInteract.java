@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2014-2016 GeorgH93
+* Copyright (C) 2014-2016, 2018 GeorgH93
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -46,8 +46,8 @@ public class PlayerInteract implements Listener
 	
 	public PlayerInteract(EntityControl plugin)
 	{
-		blockCreativeOnly = plugin.config.getEggBlockCreativeOnly();
-		for(Object o : plugin.config.getSpawnEggAllowedIDs())
+		blockCreativeOnly = plugin.getConfiguration().getEggBlockCreativeOnly();
+		for(Object o : plugin.getConfiguration().getSpawnEggAllowedIDs())
 		{
 			try
 			{
@@ -55,10 +55,10 @@ public class PlayerInteract implements Listener
 			}
 			catch(Exception ignored) {}
 		}
-		timed = plugin.config.getSpawnEggTimedEnabled();
-		interval = plugin.config.getSpawnEggTimedInterval() * 1000L;
-		long cleanInterval = plugin.config.getSpawnEggTimedCleanInterval() * 20L;
-		maxPerDay = plugin.config.getSpawnEggTimedMexPerDay();
+		timed = plugin.getConfiguration().getSpawnEggTimedEnabled();
+		interval = plugin.getConfiguration().getSpawnEggTimedInterval() * 1000L;
+		long cleanInterval = plugin.getConfiguration().getSpawnEggTimedCleanInterval() * 20L;
+		maxPerDay = plugin.getConfiguration().getSpawnEggTimedMexPerDay();
 		if(timed)
 		{
 			lastClean = new Date();
@@ -76,10 +76,10 @@ public class PlayerInteract implements Listener
 					}
 				}, cleanInterval, cleanInterval);
 		}
-		ignoredWorlds = plugin.config.getLimiterIgnoreWorlds();
-		messageSpawnEgg = EntityControl.lang.get("Egg.SpawnEgg");
-		messageCooldown = EntityControl.lang.get("Egg.TimedCooldown");
-		messageDayMax = EntityControl.lang.get("Egg.TimedMaxPerDay");
+		ignoredWorlds = plugin.getConfiguration().getLimiterIgnoreWorlds();
+		messageSpawnEgg = plugin.getLanguage().get("Egg.SpawnEgg");
+		messageCooldown = plugin.getLanguage().get("Egg.TimedCooldown");
+		messageDayMax = plugin.getLanguage().get("Egg.TimedMaxPerDay");
 	}
 	
 	@EventHandler
