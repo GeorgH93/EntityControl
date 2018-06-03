@@ -29,6 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import at.pcgamingfreaks.Bukkit.Message.Message;
 import at.pcgamingfreaks.EntityControl.EntityControl;
 import at.pcgamingfreaks.EntityControl.MobType;
 
@@ -42,7 +43,7 @@ public class PlayerInteract implements Listener
 	private HashMap<UUID, Integer> count = new HashMap<>();
 	private HashMap<UUID, Date> last = new HashMap<>();
 	private HashSet<String> ignoredWorlds;
-	private String messageSpawnEgg, messageCooldown, messageDayMax;
+	private Message messageSpawnEgg, messageCooldown, messageDayMax;
 	
 	public PlayerInteract(EntityControl plugin)
 	{
@@ -62,37 +63,24 @@ public class PlayerInteract implements Listener
 		if(timed)
 		{
 			lastClean = new Date();
-			plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin,
-				new Runnable()
+			plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+				if(lastClean.getTime() / 86400000L != (new Date()).getTime() / 86400000L)
 				{
-					@Override
-					public void run()
-					{
-						if(lastClean.getTime() / 86400000L != (new Date()).getTime() / 86400000L)
-						{
-							lastClean = new Date();
-							count.clear();
-						}
-					}
-				}, cleanInterval, cleanInterval);
+					lastClean = new Date();
+					count.clear();
+				}
+			}, cleanInterval, cleanInterval);
 		}
 		ignoredWorlds = plugin.getConfiguration().getLimiterIgnoreWorlds();
-		messageSpawnEgg = plugin.getLanguage().get("Egg.SpawnEgg");
-		messageCooldown = plugin.getLanguage().get("Egg.TimedCooldown");
-		messageDayMax = plugin.getLanguage().get("Egg.TimedMaxPerDay");
+		messageSpawnEgg = plugin.getLanguage().getMessage("Egg.SpawnEgg");
+		messageCooldown = plugin.getLanguage().getMessage("Egg.TimedCooldown");
+		messageDayMax = plugin.getLanguage().getMessage("Egg.TimedMaxPerDay");
 	}
 	
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		if (event.isCancelled())
-		{
-			return;
-		}
-		if(ignoredWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase()))
-		{
-			return;
-		}
+		if(ignoredWorlds.contains(event.getPlayer().getLocation().getWorld().getName().toLowerCase())) return;
 		Player p = event.getPlayer();
 		if(!blockCreativeOnly || p.getGameMode() == GameMode.CREATIVE)
 		{
@@ -113,7 +101,7 @@ public class PlayerInteract implements Listener
 						if(c >= maxPerDay && !p.hasPermission("entitycontrol.egg.timed.nolimit"))
 						{
 							event.setCancelled(true);
-							p.sendMessage(messageDayMax);
+							messageDayMax.send(p);
 						}
 						else
 						{
@@ -127,7 +115,7 @@ public class PlayerInteract implements Listener
 							else
 							{
 								event.setCancelled(true);
-								p.sendMessage(messageCooldown);
+								messageCooldown.send(p);
 							}
 						}
 					}
@@ -137,7 +125,7 @@ public class PlayerInteract implements Listener
 					if(!p.hasPermission("entitycontrol.egg." + type.getCategory().name().toLowerCase() + "." + type.getPermName()))
 					{
 						event.setCancelled(true);
-						p.sendMessage(String.format(messageSpawnEgg, type.getName()));
+						messageSpawnEgg.send(p, type.getName());
 					}
 				}
 			}

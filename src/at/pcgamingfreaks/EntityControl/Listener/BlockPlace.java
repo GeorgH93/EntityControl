@@ -26,19 +26,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import at.pcgamingfreaks.Bukkit.Message.Message;
 import at.pcgamingfreaks.EntityControl.EntityControl;
 
 public class BlockPlace implements Listener
 {
-	private String messageIronGolem, messageSnowGolem, messageWither;
-	private boolean checkIronGolem, checkSnowGolem, checkWither;
-	private HashSet<String> ignoreWorlds;
+	private final Message messageIronGolem, messageSnowGolem, messageWither;
+	private final boolean checkIronGolem, checkSnowGolem, checkWither;
+	private final HashSet<String> ignoreWorlds;
 	
 	public BlockPlace(EntityControl plugin)
 	{
-		messageIronGolem = plugin.getLanguage().get("Build.IronGolem");
-		messageSnowGolem = plugin.getLanguage().get("Build.SnowGolem");
-		messageWither = plugin.getLanguage().get("Build.Wither");
+		messageIronGolem = plugin.getLanguage().getMessage("Build.IronGolem");
+		messageSnowGolem = plugin.getLanguage().getMessage("Build.SnowGolem");
+		messageWither = plugin.getLanguage().getMessage("Build.Wither");
 		checkIronGolem = plugin.getConfiguration().getBuild("IronGolem");
 		checkSnowGolem = plugin.getConfiguration().getBuild("SnowGolem");
 		checkWither = plugin.getConfiguration().getBuild("Wither");
@@ -62,7 +63,7 @@ public class BlockPlace implements Listener
 		    		&& Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-2, Loc.getBlockZ()).getType() == Material.IRON_BLOCK)
 		    	{
 		    		event.setCancelled(true);
-		    		player.sendMessage(messageIronGolem);
+				    messageIronGolem.send(player);
 		    	}
 		    }
 		    if(checkSnowGolem && !player.hasPermission("entitycontrol.build.snowgolem"))
@@ -71,7 +72,7 @@ public class BlockPlace implements Listener
 			    		&& Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()-2, Loc.getBlockZ()).getType() == Material.SNOW_BLOCK)
 		    	{
 		    		event.setCancelled(true);
-		    		player.sendMessage(messageSnowGolem);
+				    messageSnowGolem.send(player);
 		    	}
 		    }
 	    }
@@ -84,7 +85,7 @@ public class BlockPlace implements Listener
 	    		|| Loc.getWorld().getBlockAt(Loc.getBlockX(), Loc.getBlockY()+1, Loc.getBlockZ()).getType() == Material.SKULL_ITEM)))
 	    	{
 	    		event.setCancelled(true);
-	    		player.sendMessage(messageWither);
+			    messageWither.send(player);
 	    	}
 	    }
 	}

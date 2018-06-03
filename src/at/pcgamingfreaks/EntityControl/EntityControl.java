@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import at.pcgamingfreaks.Bukkit.Message.Message;
 import at.pcgamingfreaks.EntityControl.Listener.*;
 
 public class EntityControl extends JavaPlugin
@@ -42,7 +43,7 @@ public class EntityControl extends JavaPlugin
 	private Language lang;
 	private boolean notifyPlayers;
 	private int surroundingChunks;
-	private String message_RemovedEntites;
+	private Message messageRemovedEntites;
 
 	@Override
 	public void onEnable()
@@ -51,7 +52,7 @@ public class EntityControl extends JavaPlugin
 
 		notifyPlayers = config.getLimiterNotifyPlayers();
 		surroundingChunks = config.getLimiterCheckSurroundingChunks();
-		message_RemovedEntites = lang.get("RemovedEntites");
+		messageRemovedEntites = lang.getMessage("RemovedEntites");
 		
 		registerEvents();
 
@@ -140,23 +141,23 @@ public class EntityControl extends JavaPlugin
 	    	{
 	    		continue;
 	    	}
-		    String eType = entities[i].getType().toString();
-		    String eGroup = getMobGroup(entities[i]);
-		    if(config.getLimiterMaxEntitiesContains(eType))
+		    String entityType = entities[i].getType().toString();
+		    String entityGroupString = getMobGroup(entities[i]);
+		    if(config.getLimiterMaxEntitiesContains(entityType))
 		    {
-		    	if (!types.containsKey(eType))
+		    	if (!types.containsKey(entityType))
 		    	{
-		    		types.put(eType, new ArrayList<>());
+		    		types.put(entityType, new ArrayList<>());
 		        }
-		        types.get(eType).add(entities[i]);
+		        types.get(entityType).add(entities[i]);
 		    }
-		    if(config.getLimiterMaxEntitiesContains(eGroup))
+		    if(config.getLimiterMaxEntitiesContains(entityGroupString))
 		    {
-		    	if (!types.containsKey(eGroup))
+		    	if (!types.containsKey(entityGroupString))
 		    	{
-		    		types.put(eGroup, new ArrayList<>());
+		    		types.put(entityGroupString, new ArrayList<>());
 		        }
-		        types.get(eGroup).add(entities[i]);
+		        types.get(entityGroupString).add(entities[i]);
 		    }
 	    }
 		for(Map.Entry<String, ArrayList<Entity>> entry : types.entrySet())
@@ -171,8 +172,7 @@ public class EntityControl extends JavaPlugin
 		        	{
 		        		if(entities[i] instanceof Player)
 		        		{
-		        			Player p = (Player)entities[i];
-		        			p.sendMessage(String.format(message_RemovedEntites, entry.getValue().size() - limit, eType));
+					        messageRemovedEntites.send(entities[i], entry.getValue().size() - limit, eType);
 		        		}
 		        	}
 		        }
