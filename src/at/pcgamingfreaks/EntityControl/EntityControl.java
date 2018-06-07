@@ -1,18 +1,18 @@
 /*
-* Copyright (C) 2014-2016, 2018 GeorgH93
+*   Copyright (C) 2014-2016, 2018 GeorgH93
 *
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+*   This program is free software: you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation, either version 3 of the License, or
+*   (at your option) any later version.
 *
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
+*   This program is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+*   GNU General Public License for more details.
 *
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*   You should have received a copy of the GNU General Public License
+*   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 package at.pcgamingfreaks.EntityControl;
@@ -31,6 +31,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.WaterMob;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import at.pcgamingfreaks.Bukkit.Message.Message;
@@ -62,28 +63,13 @@ public class EntityControl extends JavaPlugin
 
 	public void registerEvents()
 	{
-		if(config.getBuildEnabled())
-		{
-			getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
-		}
-		if(config.getDispenserEnabled())
-		{
-			getServer().getPluginManager().registerEvents(new BlockDispense(this), this);
-		}
-		if(config.getChickenEggEnabled())
-		{
-			getServer().getPluginManager().registerEvents(new PlayerEggThrow(this), this);
-		}
-		if(config.getSpawnEggEnabled())
-		{
-			getServer().getPluginManager().registerEvents(new PlayerInteract(this), this);
-		}
+		if(config.getBuildEnabled()) getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
+		if(config.getDispenserEnabled()) getServer().getPluginManager().registerEvents(new BlockDispense(this), this);
+		if(config.getChickenEggEnabled()) getServer().getPluginManager().registerEvents(new PlayerEggThrow(this), this);
+		if(config.getSpawnEggEnabled()) getServer().getPluginManager().registerEvents(new PlayerInteract(this), this);
 		if(config.getLimiterEnabled())
 		{
-			if(config.getLimiterEnabledOnSpawn())
-			{
-				getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this);
-			}
+			if(config.getLimiterEnabledOnSpawn()) getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this);
 			getServer().getPluginManager().registerEvents(new ChunkLoad(this), this);
 		}
 	}
@@ -91,6 +77,7 @@ public class EntityControl extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
+		HandlerList.unregisterAll(this);
 	    getServer().getScheduler().cancelTasks(this);
 		getLogger().info("All running tasks have been stopped. Plugin disabled.");
 	}
@@ -110,13 +97,13 @@ public class EntityControl extends JavaPlugin
 		return instance;
 	}
 
-	public void checkChunks(Location loc)
+	public void checkChunks(Location location)
 	{
-		Chunk c = loc.getChunk();
+		Chunk c = location.getChunk();
 		checkChunk(c);
 		if(surroundingChunks > 0)
 		{
-			World w = loc.getWorld();
+			World w = location.getWorld();
 		    for(int x = c.getX() + surroundingChunks; x >= c.getX() - surroundingChunks; x--)
 		    {
 		    	for(int z = c.getZ() + surroundingChunks; z >= c.getZ() - surroundingChunks; z--)
@@ -127,13 +114,13 @@ public class EntityControl extends JavaPlugin
 		}
 	}
 	
-	public void checkChunk(Chunk c)
+	public void checkChunk(Chunk chunk)
 	{
-		if(!c.isLoaded())
+		if(!chunk.isLoaded())
 		{
 			return;
 		}
-		Entity[] entities = c.getEntities();
+		Entity[] entities = chunk.getEntities();
 		HashMap<String, ArrayList<Entity>> types = new HashMap<>();
 	    for(int i = entities.length - 1; i >= 0; i--)
 	    {
@@ -186,26 +173,11 @@ public class EntityControl extends JavaPlugin
 	
 	public static String getMobGroup(Entity entity)
 	{
-		if (entity instanceof Animals)
-		{
-			return "ANIMAL";
-		}
-		if (entity instanceof Monster)
-		{
-			return "MONSTER";
-		}
-		if (entity instanceof Ambient)
-		{
-			return "AMBIENT";
-		}
-		if (entity instanceof WaterMob)
-		{
-			return "WATER_MOB";
-		}
-		if (entity instanceof NPC)
-		{
-			return "NPC";
-		}
+		if (entity instanceof Animals) return "ANIMAL";
+		if (entity instanceof Monster) return "MONSTER";
+		if (entity instanceof Ambient) return "AMBIENT";
+		if (entity instanceof WaterMob) return "WATER_MOB";
+		if (entity instanceof NPC) return "NPC";
 		return "OTHER";
 	}
 }
