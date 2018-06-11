@@ -23,6 +23,7 @@ import at.pcgamingfreaks.EntityControl.EntityControl;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -47,37 +48,29 @@ public class BlockPlace implements Listener
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void OnBlockPlace(BlockPlaceEvent event)
+	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		Player player = event.getPlayer();
 		Location location = event.getBlock().getLocation();
 		if(ignoreWorlds.contains(location.getWorld().getName().toLowerCase())) return;
 		if(event.getBlock().getType() == Material.PUMPKIN || event.getBlock().getType() == Material.JACK_O_LANTERN)
 		{
-			if(checkIronGolem && !player.hasPermission("entitycontrol.build.irongolem"))
-			{
-				if(location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ()).getType() == Material.IRON_BLOCK && location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 2, location.getBlockZ()).getType() == Material.IRON_BLOCK)
-				{
-					event.setCancelled(true);
-					messageIronGolem.send(player);
-				}
-			}
-			if(checkSnowGolem && !player.hasPermission("entitycontrol.build.snowgolem"))
-			{
-				if(location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ()).getType() == Material.SNOW_BLOCK && location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 2, location.getBlockZ()).getType() == Material.SNOW_BLOCK)
-				{
-					event.setCancelled(true);
-					messageSnowGolem.send(player);
-				}
-			}
+			if(checkIronGolem && !player.hasPermission("entitycontrol.build.irongolem")) handleGolem(location, Material.IRON_BLOCK, event, messageIronGolem, player);
+			if(checkSnowGolem && !player.hasPermission("entitycontrol.build.snowgolem")) handleGolem(location, Material.SNOW_BLOCK, event, messageSnowGolem, player);
 		}
-		if(checkWither && !player.hasPermission("entitycontrol.build.wither"))
+		if((event.getBlock().getType() == Material.SKULL || event.getBlock().getType() == Material.SKULL_ITEM) && checkWither && !player.hasPermission("entitycontrol.build.wither"))
 		{
-			if(((event.getBlock().getType() == Material.SKULL || event.getBlock().getType() == Material.SKULL_ITEM) && location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ()).getType() == Material.SOUL_SAND) || (event.getBlock().getType() == Material.SOUL_SAND && (location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ()).getType() == Material.SKULL || location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ()).getType() == Material.SKULL_ITEM)))
-			{
-				event.setCancelled(true);
-				messageWither.send(player);
-			}
+			handleGolem(location, Material.SOUL_SAND, event, messageWither, player);
+		}
+	}
+
+	private static void handleGolem(Location location, Material material, Cancellable event, Message message, Player player)
+	{
+		if(location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 1, location.getBlockZ()).getType() == material
+				&& location.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() - 2, location.getBlockZ()).getType() == material)
+		{
+			event.setCancelled(true);
+			message.send(player);
 		}
 	}
 }

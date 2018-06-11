@@ -3,7 +3,7 @@ Language:
   Build:
     IronGolem: '&eEs ist dir nicht erlaubt einen &bEisengolem&e zu bauen!'
     Wither: '&eEs ist dir nicht erlaubt einen &bWither&e zu bauen!'
-    SnowGolem: '&eEs ist dir nicht erlaubt einen &bSchneegolem&e zu bauen!'
+    SnowGolem: '&eEs ist dir nicht erlaubt einen &bSchneeman&e zu bauen!'
   Egg:
     ChickenEgg: '&eEs ist dir nicht erlaubt H&hner mit Eiern zu spawnen.'
     SpawnEgg: '&eEs ist dir nicht erlaubt ein(e/en) &b%s&e zu spawnen.'
