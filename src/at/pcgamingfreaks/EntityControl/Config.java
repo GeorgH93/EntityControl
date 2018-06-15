@@ -94,7 +94,7 @@ public class Config extends Configuration
 
 	public long getSpawnEggTimedCleanInterval()
 	{
-		return getConfig().getLong("Eggs.Spawn.Timed.CleanInterval", 3600);
+		return getConfig().getLong("Eggs.Spawn.Timed.CleanInterval", 3600) * 20L;
 	}
 
 	public boolean getChickenEggEnabled()

@@ -40,10 +40,16 @@ public class BlockDispense implements Listener
 		if(plugin.getConfiguration().getDispenserBlock("ChickenEgg")) blockedMaterials.add(Material.EGG);
 		if(plugin.getConfiguration().getDispenserBlock("SpawnEgg")) blockedMaterials.add(Material.MONSTER_EGG);
 		if(plugin.getConfiguration().getDispenserBlock("EXP_Bottle")) blockedMaterials.add(Material.EXP_BOTTLE);
-		if(plugin.getConfiguration().getDispenserBlock("Fire")) blockedMaterials.add(Material.FIRE);
-		if(plugin.getConfiguration().getDispenserBlock("Fire")) blockedMaterials.add(Material.FIREBALL);
-		if(plugin.getConfiguration().getDispenserBlock("Pumpkin")) blockedMaterials.add(Material.PUMPKIN);
-		if(plugin.getConfiguration().getDispenserBlock("Pumpkin")) blockedMaterials.add(Material.JACK_O_LANTERN);
+		if(plugin.getConfiguration().getDispenserBlock("Fire"))
+		{
+			blockedMaterials.add(Material.FIRE);
+			blockedMaterials.add(Material.FIREBALL);
+		}
+		if(plugin.getConfiguration().getDispenserBlock("Pumpkin"))
+		{
+			blockedMaterials.add(Material.PUMPKIN);
+			blockedMaterials.add(Material.JACK_O_LANTERN);
+		}
 		ignoredWorlds = plugin.getConfiguration().getDispenserIgnoreWorlds();
 	}
 

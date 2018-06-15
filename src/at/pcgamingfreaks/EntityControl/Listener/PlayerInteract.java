@@ -56,8 +56,7 @@ public class PlayerInteract implements Listener
 		messageCooldown = plugin.getLanguage().getMessage("Egg.TimedCooldown");
 		messageDayMax = plugin.getLanguage().getMessage("Egg.TimedMaxPerDay");
 
-		final long cleanInterval = plugin.getConfiguration().getSpawnEggTimedCleanInterval() * 20L;
-		if(timed) plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, countUsed::clear, cleanInterval, cleanInterval);
+		if(timed) plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, countUsed::clear, plugin.getConfiguration().getSpawnEggTimedCleanInterval(), plugin.getConfiguration().getSpawnEggTimedCleanInterval());
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -99,13 +98,10 @@ public class PlayerInteract implements Listener
 						}
 					}
 				}
-				else
+				else if(!player.hasPermission("entitycontrol.egg." + type.getCategory().name().toLowerCase() + "." + type.getPermName()))
 				{
-					if(!player.hasPermission("entitycontrol.egg." + type.getCategory().name().toLowerCase() + "." + type.getPermName()))
-					{
-						event.setCancelled(true);
-						messageSpawnEgg.send(player, type.getName());
-					}
+					event.setCancelled(true);
+					messageSpawnEgg.send(player, type.getName());
 				}
 			}
 		}
