@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2014-2016, 2018 GeorgH93
+ *   Copyright (C) 2019 GeorgH93
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,14 +19,15 @@ package at.pcgamingfreaks.EntityControl.Listener;
 
 import at.pcgamingfreaks.Bukkit.Message.Message;
 import at.pcgamingfreaks.EntityControl.EntityControl;
+import at.pcgamingfreaks.EntityControl.MagicValues;
 import at.pcgamingfreaks.EntityControl.MobType;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,7 +67,8 @@ public class PlayerInteract implements Listener
 		final Player player = event.getPlayer();
 		if(!blockCreativeOnly || player.getGameMode() == GameMode.CREATIVE)
 		{
-			if(player.getItemInHand().getType() == Material.MONSTER_EGG || player.getItemInHand().getType() == Material.MONSTER_EGGS)
+			ItemStack item = player.getItemInHand();
+			if(MagicValues.SPAWN_EGGS.contains(item.getType()))
 			{
 				MobType type = MobType.getMobTypeFromId(player.getItemInHand().getDurability());
 				if(allowedIDs.contains(type.getEntityId()))

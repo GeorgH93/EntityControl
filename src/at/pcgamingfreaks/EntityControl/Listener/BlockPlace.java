@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2014-2016, 2018 GeorgH93
+ *   Copyright (C) 2019 GeorgH93
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class BlockPlace implements Listener
 			if(checkIronGolem && !player.hasPermission("entitycontrol.build.irongolem")) handleGolem(location, Material.IRON_BLOCK, event, messageIronGolem, player);
 			if(checkSnowGolem && !player.hasPermission("entitycontrol.build.snowgolem")) handleGolem(location, Material.SNOW_BLOCK, event, messageSnowGolem, player);
 		}
-		if((event.getBlock().getType() == Material.SKULL || event.getBlock().getType() == Material.SKULL_ITEM) && checkWither && !player.hasPermission("entitycontrol.build.wither"))
+		if(checkWither && (event.getBlock().getType() == Material.WITHER_SKELETON_SKULL || event.getBlock().getType() == Material.SKELETON_SKULL) && !player.hasPermission("entitycontrol.build.wither"))
 		{
 			handleGolem(location, Material.SOUL_SAND, event, messageWither, player);
 		}

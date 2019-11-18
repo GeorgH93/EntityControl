@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 2014-2016, 2018 GeorgH93
+ *   Copyright (C) 2019 GeorgH93
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 package at.pcgamingfreaks.EntityControl.Listener;
 
 import at.pcgamingfreaks.EntityControl.EntityControl;
+import at.pcgamingfreaks.EntityControl.MagicValues;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -38,12 +39,12 @@ public class BlockDispense implements Listener
 	{
 		dispenseSnowball = plugin.getConfiguration().getDispenserBlock("DispenseSnowball");
 		if(plugin.getConfiguration().getDispenserBlock("ChickenEgg")) blockedMaterials.add(Material.EGG);
-		if(plugin.getConfiguration().getDispenserBlock("SpawnEgg")) blockedMaterials.add(Material.MONSTER_EGG);
-		if(plugin.getConfiguration().getDispenserBlock("EXP_Bottle")) blockedMaterials.add(Material.EXP_BOTTLE);
+		if(plugin.getConfiguration().getDispenserBlock("SpawnEgg")) blockedMaterials.addAll(MagicValues.SPAWN_EGGS);
+		if(plugin.getConfiguration().getDispenserBlock("EXP_Bottle")) blockedMaterials.add(Material.EXPERIENCE_BOTTLE);
 		if(plugin.getConfiguration().getDispenserBlock("Fire"))
 		{
 			blockedMaterials.add(Material.FIRE);
-			blockedMaterials.add(Material.FIREBALL);
+			blockedMaterials.add(Material.FIRE_CHARGE);
 		}
 		if(plugin.getConfiguration().getDispenserBlock("Pumpkin"))
 		{
@@ -59,9 +60,9 @@ public class BlockDispense implements Listener
 		if(ignoredWorlds.contains(event.getBlock().getLocation().getWorld().getName().toLowerCase())) return;
 		if(blockedMaterials.contains(event.getItem().getType()))
 		{
-			if(dispenseSnowball && (event.getItem().getType() == Material.EGG || event.getItem().getType() == Material.MONSTER_EGG))
+			if(dispenseSnowball && (event.getItem().getType() == Material.EGG || MagicValues.SPAWN_EGGS.contains(event.getItem().getType())))
 			{
-				event.setItem(new ItemStack(Material.SNOW_BALL));
+				event.setItem(new ItemStack(Material.SNOWBALL));
 			}
 			else
 			{

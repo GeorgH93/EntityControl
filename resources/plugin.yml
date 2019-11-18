@@ -1,7 +1,9 @@
-name: ${name}
-main: ${groupId}.${artifactId}.${artifactId}
-version: ${version}
-author: ${author}
+name: "${name}"
+author: "${author}"
+main: "${groupId}.${artifactId}.${artifactId}"
+description: "${project.description}"
+version: "${version}"
+api-version: "1.13"
 depend: [PCGF_PluginLib]
 permissions:
   entitycontrol.*:
