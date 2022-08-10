@@ -10,6 +10,9 @@
 		<connection>scm:git:git@github.com:GeorgH93/EntityControl.git</connection>
 		<developerConnection>scm:git:git@github.com:GeorgH93/EntityControl.git</developerConnection>
 		<url>git@github.com:GeorgH93/EntityControl.git</url>
+		
+		<sonar.organization>georgh93</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
